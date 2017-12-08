@@ -44,11 +44,9 @@ func Root() {
 		ErrorWriter: os.Stderr,
 	}
 
-	c := cli.NewCLI("tfw", "0.0.1")
+	c := cli.NewCLI("tfwrapper", "0.0.1")
 
-	// var Commands map[string]cli.CommandFactory
-	// var PlumbingCommands map[string]struct{}
-
+	c.Args = os.Args[1:]
 	c.Commands = map[string]cli.CommandFactory{
 		"apply": func() (cli.Command, error) {
 			return &ApplyCommand{

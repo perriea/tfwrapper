@@ -8,8 +8,8 @@ import (
 )
 
 func Exec(s []string) {
+
 	cmd := exec.Command("terraform", strings.Join(s, " "))
-	// fmt.Println(cmd.Args)
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
