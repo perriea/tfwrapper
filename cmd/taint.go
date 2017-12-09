@@ -47,15 +47,15 @@ func (c *TaintCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *TaintCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Manually mark a resource for recreation"
 }
 
 func (c *TaintCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Manually mark a resource for recreation"
 }

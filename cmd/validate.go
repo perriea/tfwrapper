@@ -47,15 +47,15 @@ func (c *ValidateCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *ValidateCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Validates the Terraform files"
 }
 
 func (c *ValidateCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Validates the Terraform files"
 }

@@ -47,15 +47,15 @@ func (c *WorkspaceCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *WorkspaceCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Workspace management"
 }
 
 func (c *WorkspaceCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Workspace management"
 }

@@ -47,15 +47,15 @@ func (c *ProvidersCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *ProvidersCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Prints a tree of the providers used in the configuration"
 }
 
 func (c *ProvidersCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Prints a tree of the providers used in the configuration"
 }

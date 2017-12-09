@@ -33,29 +33,33 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
+// ApplyCommand : Struct UI Parameter
 type ApplyCommand struct {
 	UI cli.Ui
 }
 
-func (c *ApplyCommand) Run(args []string) int {
+// Run : Executing Terraform command
+func (c *ApplyCommand) Run(s []string) int {
 
-	s := []string{"apply"}
-	for _, item := range args {
-		s = append(s, item)
+	args := []string{"apply"}
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	app.Exec(s)
+	wrapper.Apply(args)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
+// Help : Show Help
 func (c *ApplyCommand) Help() string {
 	return "Builds or changes infrastructure"
 }
 
+// Synopsis : Show Synopsis
 func (c *ApplyCommand) Synopsis() string {
 	return "Builds or changes infrastructure"
 }

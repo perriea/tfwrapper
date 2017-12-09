@@ -33,29 +33,29 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
 type InitCommand struct {
 	UI cli.Ui
 }
 
-func (c *InitCommand) Run(args []string) int {
+func (c *InitCommand) Run(s []string) int {
 
-	s := []string{"init"}
-	for _, item := range args {
-		s = append(s, item)
+	args := []string{"init"}
+	for _, item := range s {
+		args = append(s, item)
 	}
 
-	app.Exec(s)
+	wrapper.Init(args)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *InitCommand) Help() string {
-	return "Create new project or stack (detailed help information here) :\n    --stack      test\n    --project    test"
+	return "Initialize a Terraform working directory"
 }
 
 func (c *InitCommand) Synopsis() string {
-	return "Create new project or stack"
+	return "Initialize a Terraform working directory"
 }

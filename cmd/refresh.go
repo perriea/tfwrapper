@@ -47,15 +47,15 @@ func (c *RefreshCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *RefreshCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Update local state file against real resources"
 }
 
 func (c *RefreshCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Update local state file against real resources"
 }

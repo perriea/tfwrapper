@@ -47,15 +47,15 @@ func (c *PushCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *PushCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Upload this Terraform module to Atlas to run"
 }
 
 func (c *PushCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Upload this Terraform module to Atlas to run"
 }

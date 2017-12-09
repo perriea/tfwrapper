@@ -47,15 +47,15 @@ func (c *UnTaintCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *UnTaintCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Manually unmark a resource as tainted"
 }
 
 func (c *UnTaintCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Manually unmark a resource as tainted"
 }

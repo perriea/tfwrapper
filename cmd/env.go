@@ -36,10 +36,12 @@ import (
 	"github.com/perriea/tfwrapper/pkg/app"
 )
 
+// EnvCommand : Struct UI Parameter
 type EnvCommand struct {
 	UI cli.Ui
 }
 
+// Run : Executing Terraform command
 func (c *EnvCommand) Run(args []string) int {
 
 	s := []string{"env"}
@@ -47,15 +49,17 @@ func (c *EnvCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
+// Help : Show Help
 func (c *EnvCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Workspace management"
 }
 
+// Synopsis : Show Synopsis
 func (c *EnvCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Workspace management"
 }

@@ -47,15 +47,15 @@ func (c *VersionCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *VersionCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Prints the Terraform version"
 }
 
 func (c *VersionCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Prints the Terraform version"
 }

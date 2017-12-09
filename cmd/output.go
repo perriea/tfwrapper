@@ -47,15 +47,15 @@ func (c *OutputCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *OutputCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Read an output from a state file"
 }
 
 func (c *OutputCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Read an output from a state file"
 }

@@ -47,15 +47,15 @@ func (c *PlanCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *PlanCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Generate and show an execution plan"
 }
 
 func (c *PlanCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Generate and show an execution plan"
 }

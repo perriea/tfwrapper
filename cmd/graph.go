@@ -47,15 +47,15 @@ func (c *GraphCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *GraphCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Create a visual graph of Terraform resources"
 }
 
 func (c *GraphCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Create a visual graph of Terraform resources"
 }

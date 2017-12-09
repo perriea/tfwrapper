@@ -47,15 +47,15 @@ func (c *ImportCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 func (c *ImportCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Import existing infrastructure into Terraform"
 }
 
 func (c *ImportCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Import existing infrastructure into Terraform"
 }

@@ -36,10 +36,12 @@ import (
 	"github.com/perriea/tfwrapper/pkg/app"
 )
 
+// DestroyCommand : Struct UI Parameter
 type DestroyCommand struct {
 	UI cli.Ui
 }
 
+// Run : Executing Terraform command
 func (c *DestroyCommand) Run(args []string) int {
 
 	s := []string{"destroy"}
@@ -47,15 +49,17 @@ func (c *DestroyCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
+// Help : Show Help
 func (c *DestroyCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Destroy Terraform-managed infrastructure"
 }
 
+// Synopsis : Show Synopsis
 func (c *DestroyCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Destroy Terraform-managed infrastructure"
 }

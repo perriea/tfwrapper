@@ -36,10 +36,12 @@ import (
 	"github.com/perriea/tfwrapper/pkg/app"
 )
 
+// FmtCommand : Struct UI Parameter
 type FmtCommand struct {
 	UI cli.Ui
 }
 
+// Run : Executing Terraform command
 func (c *FmtCommand) Run(args []string) int {
 
 	s := []string{"fmt"}
@@ -47,15 +49,17 @@ func (c *FmtCommand) Run(args []string) int {
 		s = append(s, item)
 	}
 
-	app.Exec(s)
+	app.Exec("terraform", s)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
+// Help : Show Help
 func (c *FmtCommand) Help() string {
-	return "Builds or changes infrastructure"
+	return "Rewrites config files to canonical format"
 }
 
+// Synopsis : Show Synopsis
 func (c *FmtCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+	return "Rewrites config files to canonical format"
 }
