@@ -50,9 +50,9 @@ func Run(profilePtr *string, roleSessionName string) {
 	os.Setenv("AWS_SECRET_ACCESS_KEY", *result.Credentials.SecretAccessKey)
 	os.Setenv("AWS_SESSION_TOKEN", *result.Credentials.SessionToken)
 	// Unset environment variables
-	defer os.Unsetenv("AWS_ACCESS_KEY_ID")
-	defer os.Unsetenv("AWS_SECRET_ACCESS_KEY")
-	defer os.Unsetenv("AWS_SESSION_TOKEN")
+	// defer os.Unsetenv("AWS_ACCESS_KEY_ID")
+	// defer os.Unsetenv("AWS_SECRET_ACCESS_KEY")
+	// defer os.Unsetenv("AWS_SESSION_TOKEN")
 }
 
 // GetAWSConfig parses the AWS shared config and returns an AWSConfig struct

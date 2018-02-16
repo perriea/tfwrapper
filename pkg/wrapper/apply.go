@@ -5,6 +5,7 @@ import (
 
 	"github.com/perriea/tfwrapper/pkg/app"
 	"github.com/perriea/tfwrapper/pkg/aws"
+	file "github.com/perriea/tfwrapper/pkg/file"
 )
 
 var (
@@ -21,7 +22,10 @@ func Apply(args []string) {
 		fmt.Printf("Profile: %s\n", configuration.Aws.Credentials.Profile)
 		fmt.Printf("Client: %s\n\n", configuration.Terraform.Vars.ClientName)
 
-		auth.Run(&configuration.Aws.Credentials.Profile, configuration.Aws.Credentials.Role)
+		if file.ExistFile("terraform.tfvars") {
+			auth.Run(&configuration.Aws.Credentials.Profile, configuration.Aws.Credentials.Role)
+			file.WriteFile("terraform.tfvars")
+		}
 		app.Exec("terraform", args)
 	} else {
 		fmt.Println("Config Folder not found !")
