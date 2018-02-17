@@ -30,8 +30,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/cli"
 	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
@@ -48,7 +46,6 @@ func (c *FmtCommand) Run(s []string) int {
 	}
 
 	wrapper.Action("fmt", args)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 

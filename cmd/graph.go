@@ -30,8 +30,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/cli"
 	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
@@ -46,7 +44,6 @@ func (c *GraphCommand) Run(s []string) int {
 	}
 
 	wrapper.Action("graph", args)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
