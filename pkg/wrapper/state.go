@@ -1,4 +1,4 @@
-package file
+package wrapper
 
 import (
 	"fmt"
@@ -8,9 +8,16 @@ import (
 	"time"
 )
 
-func ExistFile(path string) bool {
+var (
+	file *os.File
+	info os.FileInfo
+)
 
-	var info, err = os.Stat(path)
+const path = "terraform.tfvars"
+
+func existConfig() bool {
+
+	info, err = os.Stat(path)
 
 	if os.IsNotExist(err) {
 		return false
@@ -26,24 +33,22 @@ func ExistFile(path string) bool {
 		return false
 	}
 
-	if (fileNow - fileDate) < 3000 {
+	if (fileNow - fileDate) > 3000 {
 		return false
 	}
-
 	return true
 }
 
-func WriteFile(path string) {
+func writeConfig() {
 	// open file using READ & WRITE permission
-	t := time.Now()
-	var file, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+	file, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
 	if isError(err) {
 		return
 	}
 	defer file.Close()
 
 	// write some text line-by-line to file
-	_, err = file.WriteString(fmt.Sprintf("# timestamp: %s\naws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", t.Format("20060102150405"), "eu-west-1", os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN")))
+	_, err = file.WriteString(fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", "eu-west-1", os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN")))
 	if isError(err) {
 		return
 	}
@@ -57,7 +62,7 @@ func WriteFile(path string) {
 
 func readFile(path string) {
 	// re-open file
-	var file, err = os.OpenFile(path, os.O_RDWR, 0644)
+	file, err = os.OpenFile(path, os.O_RDWR, 0644)
 	if isError(err) {
 		return
 	}

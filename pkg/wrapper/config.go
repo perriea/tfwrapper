@@ -48,7 +48,7 @@ var (
 )
 
 // ReadConfig : test
-func ReadConfig() (bool, Configuration) {
+func readConfig() (bool, Configuration) {
 	i := 0
 	path := ""
 

@@ -30,7 +30,6 @@
 package app
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -38,11 +37,17 @@ import (
 )
 
 // Exec : Execute command
-func Exec(process string, args []string) {
+func Exec(args []string) {
+
 	// Prepare command with arguments
-	cmd := exec.Command(process, strings.Join(args, " "))
-	fmt.Print(cmd.Args)
-	cmd.Stdout, cmd.Stderr, cmd.Stdin = os.Stdout, os.Stderr, os.Stdin
+	cmd := exec.Command("terraform", strings.Join(args, " "))
+
+	// redirect stdout && stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	// Execute command
 	cmd.Run()
 
 	timer := time.AfterFunc(1*time.Second, func() {
