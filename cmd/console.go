@@ -30,25 +30,20 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
 type ConsoleCommand struct {
 	UI cli.Ui
 }
 
-func (c *ConsoleCommand) Run(args []string) int {
-
-	s := []string{"console"}
-	for _, item := range args {
-		s = append(s, item)
+func (c *ConsoleCommand) Run(s []string) int {
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	app.Exec("terraform", s)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
+	wrapper.Action("console", args)
 	return 0
 }
 

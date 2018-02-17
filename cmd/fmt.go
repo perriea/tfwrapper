@@ -33,7 +33,7 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
 // FmtCommand : Struct UI Parameter
@@ -42,14 +42,12 @@ type FmtCommand struct {
 }
 
 // Run : Executing Terraform command
-func (c *FmtCommand) Run(args []string) int {
-
-	s := []string{"fmt"}
-	for _, item := range args {
-		s = append(s, item)
+func (c *FmtCommand) Run(s []string) int {
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	app.Exec("terraform", s)
+	wrapper.Action("fmt", args)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }

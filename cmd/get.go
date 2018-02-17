@@ -31,25 +31,21 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
 type GetCommand struct {
 	UI cli.Ui
 }
 
-func (c *GetCommand) Run(args []string) int {
-
-	s := []string{"get"}
-	for _, item := range args {
-		s = append(s, item)
+func (c *GetCommand) Run(s []string) int {
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	fmt.Print(os.Getenv("TFWRAPPER_PROJECT") + "\n")
-	app.Exec("terraform", s)
+	wrapper.Action("get", args)
 	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }

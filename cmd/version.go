@@ -33,22 +33,21 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
+	"github.com/perriea/tfwrapper/version"
 )
 
 type VersionCommand struct {
 	UI cli.Ui
 }
 
-func (c *VersionCommand) Run(args []string) int {
-
-	s := []string{"version"}
-	for _, item := range args {
-		s = append(s, item)
+func (c *VersionCommand) Run(s []string) int {
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	app.Exec("terraform", s)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
+	fmt.Printf("tfwrapper v%s\n\n", version.String())
+	wrapper.Action("version", args)
 	return 0
 }
 

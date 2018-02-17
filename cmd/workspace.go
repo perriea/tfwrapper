@@ -30,25 +30,20 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
 type WorkspaceCommand struct {
 	UI cli.Ui
 }
 
-func (c *WorkspaceCommand) Run(args []string) int {
-
-	s := []string{"workspace"}
-	for _, item := range args {
-		s = append(s, item)
+func (c *WorkspaceCommand) Run(s []string) int {
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	app.Exec("terraform", s)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
+	wrapper.Action("workspace", args)
 	return 0
 }
 

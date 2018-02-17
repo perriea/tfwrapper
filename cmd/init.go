@@ -30,8 +30,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/cli"
 	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
@@ -41,14 +39,11 @@ type InitCommand struct {
 }
 
 func (c *InitCommand) Run(s []string) int {
-
-	args := []string{"init"}
 	for _, item := range s {
-		args = append(s, item)
+		args = append(args, item)
 	}
 
-	wrapper.Init(args)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
+	wrapper.ActionAuth("init", args)
 	return 0
 }
 

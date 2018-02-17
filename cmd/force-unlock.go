@@ -30,31 +30,34 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/mitchellh/cli"
 	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
-// ApplyCommand : Struct UI Parameter
-type ApplyCommand struct {
+// FmtCommand : Struct UI Parameter
+type ForceUnlockCommand struct {
 	UI cli.Ui
 }
 
 // Run : Executing Terraform command
-func (c *ApplyCommand) Run(s []string) int {
+func (c *ForceUnlockCommand) Run(s []string) int {
 	for _, item := range s {
 		args = append(args, item)
 	}
 
-	wrapper.ActionAuth("apply", args)
+	wrapper.Action("force-unlock", args)
+	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
 	return 0
 }
 
 // Help : Show Help
-func (c *ApplyCommand) Help() string {
-	return "Builds or changes infrastructure"
+func (c *ForceUnlockCommand) Help() string {
+	return "Rewrites config files to canonical format"
 }
 
 // Synopsis : Show Synopsis
-func (c *ApplyCommand) Synopsis() string {
-	return "Builds or changes infrastructure"
+func (c *ForceUnlockCommand) Synopsis() string {
+	return "Rewrites config files to canonical format"
 }

@@ -34,6 +34,11 @@ import (
 	"os"
 
 	"github.com/mitchellh/cli"
+	"github.com/perriea/tfwrapper/version"
+)
+
+var (
+	args []string
 )
 
 func Root() {
@@ -44,7 +49,7 @@ func Root() {
 		ErrorWriter: os.Stderr,
 	}
 
-	c := cli.NewCLI("tfwrapper", "0.0.1")
+	c := cli.NewCLI("tfwrapper", version.String())
 
 	c.Args = os.Args[1:]
 	c.Commands = map[string]cli.CommandFactory{
@@ -202,6 +207,14 @@ func Root() {
 		},
 		"workspace": func() (cli.Command, error) {
 			return &WorkspaceCommand{
+				UI: &cli.ColoredUi{
+					Ui:          ui,
+					OutputColor: cli.UiColorGreen,
+				},
+			}, nil
+		},
+		"force-unlock": func() (cli.Command, error) {
+			return &ForceUnlockCommand{
 				UI: &cli.ColoredUi{
 					Ui:          ui,
 					OutputColor: cli.UiColorGreen,

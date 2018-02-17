@@ -30,10 +30,8 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/app"
+	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
 // EnvCommand : Struct UI Parameter
@@ -42,15 +40,12 @@ type EnvCommand struct {
 }
 
 // Run : Executing Terraform command
-func (c *EnvCommand) Run(args []string) int {
-
-	s := []string{"env"}
-	for _, item := range args {
-		s = append(s, item)
+func (c *EnvCommand) Run(s []string) int {
+	for _, item := range s {
+		args = append(args, item)
 	}
 
-	app.Exec("terraform", s)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
+	wrapper.Action("env", args)
 	return 0
 }
 
