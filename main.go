@@ -22,17 +22,10 @@
  * SOFTWARE.
  */
 
-/*
- * Revision History:
- *     Initial: 2017/12/07      Aurelien PERRIER
- */
-
 package main
 
-import (
-	"github.com/perriea/tfwrapper/cmd"
-)
+import "github.com/perriea/tfwrapper/cmd"
 
 func main() {
-	cmd.Root()
+	cmd.Run()
 }
