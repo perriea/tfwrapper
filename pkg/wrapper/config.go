@@ -6,48 +6,9 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
-
-	"github.com/perriea/tfwrapper/pkg/app"
 )
 
-type Configuration struct {
-	Aws       Aws       `yaml:"aws"`
-	Terraform Terraform `yaml:"terraform"`
-}
-
-type Aws struct {
-	General     General     `yaml:"general"`
-	Credentials Credentials `yaml:"credentials"`
-}
-
-type Terraform struct {
-	Vars Vars `yaml:"vars"`
-}
-
-type Vars struct {
-	AwsAccount string `yaml:"aws_account"`
-	ClientName string `yaml:"client_name"`
-}
-
-type General struct {
-	Account string `yaml:"account"`
-	Region  string `yaml:"region"`
-}
-
-type Credentials struct {
-	Profile string `yaml:"profile"`
-	Role    string `yaml:"role"`
-}
-
-var (
-	configuration Configuration
-	dir           string
-	subfolder     []string
-	folder        []string
-	config        string
-)
-
-// ReadConfig : test
+// ReadConfig AWS || GCP || Azure
 func readConfig() (bool, Configuration) {
 	i := 0
 	path := ""
@@ -61,8 +22,8 @@ func readConfig() (bool, Configuration) {
 			subfolder = append(subfolder, "../")
 		} else {
 			// Get current directory
-			dir, err := os.Getwd()
-			app.Error(err)
+			dir, err = os.Getwd()
+			Error(err)
 
 			// Split path & generate good file
 			folder = strings.Split(dir, "/")

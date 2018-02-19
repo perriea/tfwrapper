@@ -8,30 +8,22 @@ import (
 	"time"
 )
 
-var (
-	file *os.File
-	info os.FileInfo
-)
-
 const path = "terraform.tfvars"
 
-func existConfig() bool {
+func existVarsConfig() bool {
 
 	info, err = os.Stat(path)
+	FatalError(err)
 
 	if os.IsNotExist(err) {
 		return false
 	}
 
 	fileDate, err := strconv.Atoi(info.ModTime().Format("20060102150405"))
-	if isError(err) {
-		return false
-	}
+	FatalError(err)
 
 	fileNow, err := strconv.Atoi(time.Now().Format("20060102150405"))
-	if isError(err) {
-		return false
-	}
+	FatalError(err)
 
 	if (fileNow - fileDate) > 3000 {
 		return false
@@ -39,32 +31,33 @@ func existConfig() bool {
 	return true
 }
 
-func writeConfig() {
+func writeVarsConfig() error {
 	// open file using READ & WRITE permission
 	file, err = os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
-	if isError(err) {
-		return
+	if Error(err) {
+		return err
 	}
 	defer file.Close()
 
 	// write some text line-by-line to file
 	_, err = file.WriteString(fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", "eu-west-1", os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN")))
-	if isError(err) {
-		return
+	if Error(err) {
+		return err
 	}
 
 	// save changes
 	err = file.Sync()
-	if isError(err) {
-		return
+	if Error(err) {
+		return err
 	}
+	return nil
 }
 
-func readFile(path string) {
+func readVarsFile(path string) error {
 	// re-open file
 	file, err = os.OpenFile(path, os.O_RDWR, 0644)
-	if isError(err) {
-		return
+	if Error(err) {
+		return err
 	}
 	defer file.Close()
 
@@ -80,19 +73,12 @@ func readFile(path string) {
 
 		// break if error occured
 		if err != nil && err != io.EOF {
-			isError(err)
-			break
+			return err
+			//break
 		}
 	}
 
 	fmt.Println("==> done reading from file")
 	fmt.Println(string(text))
-}
-
-func isError(err error) bool {
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	return (err != nil)
+	return nil
 }

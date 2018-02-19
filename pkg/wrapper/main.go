@@ -1,41 +1,59 @@
 package wrapper
 
-import (
-	"fmt"
-
-	"github.com/perriea/tfwrapper/pkg/app"
-	"github.com/perriea/tfwrapper/pkg/aws"
-)
+import "os"
 
 var (
-	data    []string
 	profile *string
-	err     error
+
+	config string
+	dir    string
+
+	data []string
+	// Read config
+	subfolder []string
+	folder    []string
+
+	// File info
+	file *os.File
+	info os.FileInfo
+
+	// Configuration wrapper
+	configuration Configuration
+
+	err error
 )
 
-// Action : application terraform
-func Action(action string, args []string) {
-	data = append([]string{action}, args...)
-	app.Exec(data)
+// General Vars
+type General struct {
+	Account string `yaml:"account"`
+	Region  string `yaml:"region"`
 }
 
-// ActionAuth : application terraform
-func ActionAuth(action string, args []string) {
-	err, configuration := readConfig()
-	if err {
-		fmt.Printf("Account: %s\n", configuration.Aws.General.Account)
-		fmt.Printf("Region: %s\n", configuration.Aws.General.Region)
-		fmt.Printf("Profile: %s\n", configuration.Aws.Credentials.Profile)
-		fmt.Printf("Client: %s\n\n", configuration.Terraform.Vars.ClientName)
+// Configuration file wrapper
+type Configuration struct {
+	Aws       Aws       `yaml:"aws"`
+	Terraform Terraform `yaml:"terraform"`
+}
 
-		if !existConfig() {
-			auth.Run(&configuration.Aws.Credentials.Profile, configuration.Aws.Credentials.Role)
-			writeConfig()
-		}
+// Aws Config
+type Aws struct {
+	General     General     `yaml:"general"`
+	Credentials Credentials `yaml:"credentials"`
+}
 
-		data = append([]string{action}, args...)
-		app.Exec(data)
-	} else {
-		fmt.Println("Config Folder not found !")
-	}
+// Terraform Vars
+type Terraform struct {
+	Vars Vars `yaml:"vars"`
+}
+
+// Vars Clients
+type Vars struct {
+	AwsAccount string `yaml:"aws_account"`
+	ClientName string `yaml:"client_name"`
+}
+
+// Credentials AWS
+type Credentials struct {
+	Profile string `yaml:"profile"`
+	Role    string `yaml:"role"`
 }

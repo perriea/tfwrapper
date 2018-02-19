@@ -18,12 +18,14 @@ var (
 	err error
 )
 
+// AWSConfig file struct
 type AWSConfig struct {
 	profile string
 	role    string
 	mfa     string
 }
 
+// Run auth AWS STS
 func Run(profilePtr *string, roleSessionName string) {
 	awscfg := GetAWSConfig(*profilePtr)
 	if awscfg == nil {

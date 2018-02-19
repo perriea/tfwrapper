@@ -27,7 +27,7 @@
  *     Initial: 2017/12/08      Aurelien PERRIER
  */
 
-package app
+package wrapper
 
 import (
 	"os"
@@ -36,8 +36,10 @@ import (
 	"time"
 )
 
-// Exec : Execute command
-func Exec(args []string) {
+// func Lookup() {}
+
+// execution : Execute command
+func execution(args []string) error {
 
 	// Prepare command with arguments
 	cmd := exec.Command("terraform", strings.Join(args, " "))
@@ -52,10 +54,12 @@ func Exec(args []string) {
 
 	timer := time.AfterFunc(1*time.Second, func() {
 		err := cmd.Process.Kill()
-		Error(err)
+		FatalError(err)
 		os.Exit(1)
 	})
 
 	cmd.Wait()
 	timer.Stop()
+
+	return nil
 }
