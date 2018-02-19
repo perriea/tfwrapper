@@ -4,10 +4,14 @@ import (
 	"fmt"
 
 	"github.com/perriea/tfwrapper/pkg/aws"
+	"github.com/perriea/tfwrapper/version"
 )
 
 // Action application Terraform
 func Action(action string, args []string) {
+	if action == "version" {
+		version.LastVersion()
+	}
 	data = append([]string{action}, args...)
 	execution(data)
 }
@@ -17,10 +21,11 @@ func ActionAuth(action string, args []string, quiet bool) {
 	err, configuration := readConfig()
 	if err {
 		if !quiet {
-			fmt.Printf("Account: %s\n", configuration.Aws.General.Account)
-			fmt.Printf("Region: %s\n", configuration.Aws.General.Region)
-			fmt.Printf("Profile: %s\n", configuration.Aws.Credentials.Profile)
-			fmt.Printf("Client: %s\n\n", configuration.Terraform.Vars.ClientName)
+			fmt.Printf("\033[1;31mAccount: \033[1;0m%s\n", configuration.Aws.General.Account)
+			fmt.Printf("\033[1;32mRegion: \033[1;0m%s\n", configuration.Aws.General.Region)
+			fmt.Printf("\033[1;34mProfile: \033[1;0m%s\n", configuration.Aws.Credentials.Profile)
+			fmt.Printf("\033[1;33mClient: \033[1;0m%s\n", configuration.Terraform.Vars.ClientName)
+			fmt.Print("--------------------------------------\n\n")
 		}
 
 		if !existVarsConfig() {
@@ -31,9 +36,6 @@ func ActionAuth(action string, args []string, quiet bool) {
 		data = append([]string{action}, args...)
 		FatalError(execution(data))
 	} else {
-		fmt.Println(ErrorNotFoundConfig)
+		fmt.Println("\033[1;31mError: No configuration files found!\nApply requires configuration to be present.")
 	}
 }
-
-var ErrorNotFoundConfig = `Error: No configuration files found!
-Apply requires configuration to be present.`
