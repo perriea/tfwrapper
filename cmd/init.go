@@ -143,9 +143,9 @@ func init() {
 		},
 		"version": func() Command {
 			return Command{
-				Authenticated: true,
-				InitPullState: true,
-				Quiet:         false,
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         true,
 			}
 		},
 
