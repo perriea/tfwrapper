@@ -153,6 +153,18 @@
 			"revisionTime": "2018-02-14T10:17:53Z"
 		},
 		{
+			"checksumSHA1": "u0rj5HBwrAYx7nbYg4Hsfppf7B4=",
+			"path": "github.com/google/go-github/github",
+			"revision": "632a2caf6d3d380753dc7e422748202982ad18a3",
+			"revisionTime": "2018-02-12T18:46:55Z"
+		},
+		{
+			"checksumSHA1": "p3IB18uJRs4dL2K5yx24MrLYE9A=",
+			"path": "github.com/google/go-querystring/query",
+			"revision": "53e6ce116135b80d037921a7fdd5138cf32d7a8a",
+			"revisionTime": "2017-01-11T10:11:55Z"
+		},
+		{
 			"checksumSHA1": "blwbl9vPvRLtL5QlZgfpLvsFiZ4=",
 			"path": "github.com/jmespath/go-jmespath",
 			"revision": "c2b33e8439af944379acbdd9c3a5fe0bc44bd8a5",
