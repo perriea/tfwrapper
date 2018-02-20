@@ -2,6 +2,8 @@ package wrapper
 
 import "os"
 
+const configFile = "terraform.tfvars"
+
 var (
 	profile *string
 

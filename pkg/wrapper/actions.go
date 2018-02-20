@@ -4,14 +4,10 @@ import (
 	"fmt"
 
 	"github.com/perriea/tfwrapper/pkg/aws"
-	"github.com/perriea/tfwrapper/version"
 )
 
 // Action application Terraform
 func Action(action string, args []string) {
-	if action == "version" {
-		version.LastVersion()
-	}
 	data = append([]string{action}, args...)
 	execution(data)
 }
@@ -28,6 +24,7 @@ func ActionAuth(action string, args []string, quiet bool) {
 			fmt.Print("--------------------------------------\n\n")
 		}
 
+		fmt.Println(!existVarsConfig())
 		if !existVarsConfig() {
 			auth.Run(&configuration.Aws.Credentials.Profile, configuration.Aws.Credentials.Role)
 			FatalError(writeVarsConfig())

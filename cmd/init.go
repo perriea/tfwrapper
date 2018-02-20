@@ -80,9 +80,9 @@ func init() {
 		},
 		"init": func() Command {
 			return Command{
-				Authenticated: true,
+				Authenticated: false,
 				InitPullState: true,
-				Quiet:         false,
+				Quiet:         true,
 			}
 		},
 		"output": func() Command {

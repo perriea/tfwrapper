@@ -6,6 +6,7 @@ import (
 
 // Run command
 func Run() {
+	wrapper.DisplayVersion()
 	// check len args
 	if len(args) > 0 {
 		// verify first arg
@@ -19,6 +20,7 @@ func Run() {
 				}
 			}
 		}
+		// no command
 	} else {
 		// launch helper
 		wrapper.Help()
