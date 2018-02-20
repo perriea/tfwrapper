@@ -24,7 +24,6 @@ func ActionAuth(action string, args []string, quiet bool) {
 			fmt.Print("--------------------------------------\n\n")
 		}
 
-		fmt.Println(!existVarsConfig())
 		if !existVarsConfig() {
 			auth.Run(&configuration.Aws.Credentials.Profile, configuration.Aws.Credentials.Role)
 			FatalError(writeVarsConfig())
