@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// ReadConfig AWS || GCP || Azure
-func readConfig() (bool, Configuration) {
+// readConfig : AWS || GCP || Azure
+func readConfig() (error, Configuration) {
 	i := 0
 	path := ""
 
@@ -26,7 +26,9 @@ func readConfig() (bool, Configuration) {
 		} else {
 			// Get current directory
 			dir, err = os.Getwd()
-			Error(err)
+			if err != nil {
+				return err, Configuration{}
+			}
 
 			// Split path & generate good file
 			folder = strings.Split(dir, "/")
@@ -43,22 +45,20 @@ func readConfig() (bool, Configuration) {
 			// Read file
 			viper.SetConfigName(config)
 			viper.AddConfigPath(path)
-			if err := viper.ReadInConfig(); err != nil {
-				fmt.Printf("%s", err)
-				return false, configuration
-			}
-			err = viper.Unmarshal(&configuration)
-			if err != nil {
-				fmt.Printf("%s", err)
-				return false, configuration
+			if err = viper.ReadInConfig(); err != nil {
+				return err, Configuration{}
 			}
 
-			return true, configuration
+			if err = viper.Unmarshal(&configuration); err != nil {
+				return err, Configuration{}
+			}
+
+			return nil, configuration
 		}
 		i++
 	}
 
-	return false, configuration
+	return nil, Configuration{}
 }
 
 // existVarsConfig :
@@ -82,6 +82,7 @@ func existVarsConfig() bool {
 	return true
 }
 
+// writeVarsConfig func : Write config file
 func writeVarsConfig() error {
 	// open file using READ & CREATE permission
 	file, err = os.OpenFile(configFile, os.O_RDWR|os.O_CREATE, 0755)

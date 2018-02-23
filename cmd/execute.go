@@ -14,9 +14,9 @@ func Run() {
 			// if command exist
 			if cli == args[0] {
 				if object().Authenticated {
-					wrapper.ActionAuth(cli, args, object().Quiet)
+					wrapper.ActionAuth(args, object().Quiet)
 				} else {
-					wrapper.Action(cli, args)
+					wrapper.Action(args)
 				}
 			}
 		}

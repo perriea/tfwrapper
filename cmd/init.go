@@ -115,7 +115,7 @@ func init() {
 		},
 		"show": func() Command {
 			return Command{
-				Authenticated: true,
+				Authenticated: false,
 				InitPullState: true,
 				Quiet:         false,
 			}
@@ -136,7 +136,7 @@ func init() {
 		},
 		"validate": func() Command {
 			return Command{
-				Authenticated: true,
+				Authenticated: false,
 				InitPullState: true,
 				Quiet:         true,
 			}
@@ -152,7 +152,7 @@ func init() {
 		// DEBUG
 		"debug": func() Command {
 			return Command{
-				Authenticated: true,
+				Authenticated: false,
 				InitPullState: true,
 				Quiet:         false,
 			}
@@ -166,7 +166,7 @@ func init() {
 		},
 		"state": func() Command {
 			return Command{
-				Authenticated: true,
+				Authenticated: false,
 				InitPullState: true,
 				Quiet:         true,
 			}
