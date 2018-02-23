@@ -30,8 +30,8 @@ func readConfig() (bool, Configuration) {
 
 			// Split path & generate good file
 			folder = strings.Split(dir, "/")
-			for k := (i + 2); k < len(folder); k++ {
-				if k == (i + 2) {
+			for k := i; k < len(folder); k++ {
+				if k == i {
 					config = fmt.Sprintf("%s_", folder[k])
 				} else if k == (len(folder) - 1) {
 					config = fmt.Sprintf("%s%s", config, folder[k])
@@ -61,6 +61,7 @@ func readConfig() (bool, Configuration) {
 	return false, configuration
 }
 
+// existVarsConfig :
 func existVarsConfig() bool {
 
 	info, err = os.Stat(configFile)
@@ -74,9 +75,10 @@ func existVarsConfig() bool {
 	fileNow, err := strconv.Atoi(time.Now().Format("20060102150405"))
 	FatalError(err)
 
-	if (fileNow - fileDate) > 3000 {
+	if (fileNow - fileDate) > durationSess {
 		return false
 	}
+
 	return true
 }
 
@@ -111,7 +113,7 @@ func readVarsFile(configFile string) error {
 	defer file.Close()
 
 	// read file, line by line
-	var text = make([]byte, 1024)
+	var text = make([]byte, 512)
 	for {
 		_, err = file.Read(text)
 
@@ -123,7 +125,6 @@ func readVarsFile(configFile string) error {
 		// break if error occured
 		if err != nil && err != io.EOF {
 			return err
-			//break
 		}
 	}
 

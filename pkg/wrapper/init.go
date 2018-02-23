@@ -3,6 +3,8 @@ package wrapper
 import "os"
 
 const configFile = "terraform.tfvars"
+const binary = "terraform"
+const durationSess = 900
 
 var (
 	profile *string
