@@ -26,7 +26,7 @@ type AWSConfig struct {
 }
 
 // Run auth AWS STS
-func Run(profilePtr *string, roleSessionName string) {
+func Run(profilePtr *string, roleSessionName string, durationSeconds int) {
 	awscfg := GetAWSConfig(*profilePtr)
 	if awscfg == nil {
 		return
