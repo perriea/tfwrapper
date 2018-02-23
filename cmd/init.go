@@ -1,61 +1,177 @@
-/*
- * MIT License
- *
- * Copyright (c) 2017 Aurelien PERRIER
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the 'Software'), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-/*
- * Revision History:
- *     Initial: 2017/12/07      Aurelien PERRIER
- */
-
 package cmd
 
 import (
-	"fmt"
-
-	"github.com/mitchellh/cli"
-	"github.com/perriea/tfwrapper/pkg/wrapper"
+	"os"
 )
 
-type InitCommand struct {
-	UI cli.Ui
+type CommandFactory func() Command
+
+// Command Terraform
+type Command struct {
+	Description   string
+	Authenticated bool
+	InitPullState bool
+	Quiet         bool
 }
 
-func (c *InitCommand) Run(s []string) int {
+var (
+	c    map[string]CommandFactory
+	args []string
+	err  error
+)
 
-	args := []string{"init"}
-	for _, item := range s {
-		args = append(s, item)
+func init() {
+	c = map[string]CommandFactory{
+		"apply": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"console": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"destroy": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"env": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         true,
+			}
+		},
+		"fmt": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         true,
+			}
+		},
+		"get": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         true,
+			}
+		},
+		"graph": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         true,
+			}
+		},
+		"import": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"init": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: true,
+				Quiet:         true,
+			}
+		},
+		"output": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         false,
+			}
+		},
+		"plan": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"push": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: false,
+				Quiet:         false,
+			}
+		},
+		"refresh": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"show": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"taint": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"untaint": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"validate": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         true,
+			}
+		},
+		"version": func() Command {
+			return Command{
+				Authenticated: false,
+				InitPullState: false,
+				Quiet:         true,
+			}
+		},
+
+		// DEBUG
+		"debug": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"force-unlock": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         false,
+			}
+		},
+		"state": func() Command {
+			return Command{
+				Authenticated: true,
+				InitPullState: true,
+				Quiet:         true,
+			}
+		},
 	}
 
-	wrapper.Init(args)
-	c.UI.Output(fmt.Sprintf("\nIt's OK !"))
-	return 0
-}
-
-func (c *InitCommand) Help() string {
-	return "Initialize a Terraform working directory"
-}
-
-func (c *InitCommand) Synopsis() string {
-	return "Initialize a Terraform working directory"
+	args = os.Args[1:]
 }

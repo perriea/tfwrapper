@@ -10,17 +10,23 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
-
+	homedir "github.com/mitchellh/go-homedir"
 	ini "gopkg.in/ini.v1"
 )
 
+var (
+	err error
+)
+
+// AWSConfig file struct
 type AWSConfig struct {
 	profile string
 	role    string
 	mfa     string
 }
 
-func Run(profilePtr *string, roleSessionName string) {
+// Run auth AWS STS
+func Run(profilePtr *string, roleSessionName string, durationSeconds int) {
 	awscfg := GetAWSConfig(*profilePtr)
 	if awscfg == nil {
 		return
@@ -29,7 +35,7 @@ func Run(profilePtr *string, roleSessionName string) {
 	var input string
 	fmt.Printf("Enter MFA Code: ")
 	fmt.Scanln(&input)
-	fmt.Printf("\n")
+
 	// Assume Role
 	result, err := AssumeRole(
 		&sts.AssumeRoleInput{
@@ -49,25 +55,29 @@ func Run(profilePtr *string, roleSessionName string) {
 	os.Setenv("AWS_ACCESS_KEY_ID", *result.Credentials.AccessKeyId)
 	os.Setenv("AWS_SECRET_ACCESS_KEY", *result.Credentials.SecretAccessKey)
 	os.Setenv("AWS_SESSION_TOKEN", *result.Credentials.SessionToken)
-	// Unset environment variables
-	// defer os.Unsetenv("AWS_ACCESS_KEY_ID")
-	// defer os.Unsetenv("AWS_SECRET_ACCESS_KEY")
-	// defer os.Unsetenv("AWS_SESSION_TOKEN")
 }
 
 // GetAWSConfig parses the AWS shared config and returns an AWSConfig struct
 func GetAWSConfig(profile string) *AWSConfig {
 	var home, path, f string
+
 	// Check if user has AWS_CONFIG_FILE set
 	if os.Getenv("AWS_CONFIG_FILE") == "" {
+		// detect homedir
+		home, err = homedir.Dir()
+		if err != nil {
+			panic(err)
+		}
+
 		// Try to figure out the location based on OS, untested on Windows
 		if runtime.GOOS == "windows" {
-			home, path = os.Getenv("USERPROFILE"), "\\.aws\\config" // Untested
+			path = "\\.aws\\config" // Untested
 		} else {
-			home, path = os.Getenv("HOME"), "/.aws/config"
+			path = "/.aws/config"
 		}
+
 		if home != "" {
-			f = home + path
+			f = fmt.Sprintf("%s%s", home, path)
 		} else {
 			var input string
 			fmt.Printf("Please enter the full path to your aws shared config file\nPath: ")
@@ -78,25 +88,30 @@ func GetAWSConfig(profile string) *AWSConfig {
 	} else {
 		f = os.Getenv("AWS_CONFIG_FILE")
 	}
+
 	// Check to make sure the file we want to load actually exists
 	if _, err := os.Stat(f); os.IsNotExist(err) {
 		fmt.Printf("Bad path: %s", f)
 		return nil
 	}
+
 	// Check credentials file
 	cfg, err := ini.Load(f)
 	if err != nil {
 		fmt.Printf("Message: There was an error loading the AWS shared config\nError: %s\n", err)
 		return nil
 	}
+
 	if profile != "default" {
 		profile = "profile " + profile
 	}
+
 	// Check if the supplied profile is valid
 	if _, err := cfg.GetSection(profile); err != nil {
 		fmt.Printf("No such profile \"%s\" in \"%s\"\n", strings.TrimPrefix(profile, "profile "), f)
 		return nil
 	}
+
 	r := AWSConfig{
 		profile: cfg.Section(profile).Key("source_profile").String(),
 		role:    cfg.Section(profile).Key("role_arn").String(),
