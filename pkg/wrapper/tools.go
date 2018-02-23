@@ -16,6 +16,6 @@ func DisplayVersion() {
 }
 
 func Help() {
-	Action("help", []string{})
+	Action([]string{})
 	os.Exit(0)
 }
