@@ -12,17 +12,17 @@ DOCKERCMD=docker
 DOCKERBUILD=$(DOCKERCMD) build
 CONTNAME=perriea/tfwrapper:latest
 
-.PHONY: help test build docker vendor-list vendor-update
-
 all: build
 
 docker:
-	@echo "Build binary & Docker image"
+	@echo "Build binary ..."
 	@GOOS=linux $(GOBUILD) -i -o ./$(BIN) ./
+	@echo "Build Docker image ..."
 	$(DOCKERBUILD) . -t $(CONTNAME)
 
 test:
-	$(GOTEST) $(go list ./... | grep -v '/vendor/')
+	@echo "Testing ..."
+	$(GOTEST) `go list ./... | grep -v '/vendor/'`
 
 build:
 	@echo "Build binary"
@@ -33,3 +33,5 @@ vendor-list:
 
 vendor-update:
 	@govendor update +vendor
+
+.PHONY: help test build docker vendor-list vendor-update
