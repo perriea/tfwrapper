@@ -7,6 +7,7 @@ import (
 	"github.com/perriea/tfwrapper/version"
 )
 
+// DisplayVersion : Show Version executed
 func DisplayVersion() {
 	fmt.Printf("\033[1;31mtfwrapper v%s\033[0m\n\n", version.String())
 	test, release := version.LastVersion()
@@ -15,6 +16,7 @@ func DisplayVersion() {
 	}
 }
 
+// Help : show help
 func Help() {
 	Action([]string{})
 	os.Exit(0)

@@ -2,6 +2,9 @@ package wrapper
 
 import "os"
 
+const terraformVersionFile = "terraform.tf"
+const terraformDefaultVersion = "0.10.8"
+
 const configFile = "terraform.tfvars"
 const binary = "terraform"
 const durationSess = 900
@@ -22,7 +25,8 @@ var (
 	info os.FileInfo
 
 	// Configuration wrapper
-	configuration Configuration
+	configuration   Configuration
+	tfConfiguration TerraformConfig
 
 	err error
 )
@@ -60,4 +64,11 @@ type Vars struct {
 type Credentials struct {
 	Profile string `yaml:"profile"`
 	Role    string `yaml:"role"`
+}
+
+type TerraformConfig struct {
+	Terraform []terraformVersion
+}
+type terraformVersion struct {
+	Version string `mapstructure:"version"`
 }
