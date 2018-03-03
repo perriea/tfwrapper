@@ -8,20 +8,16 @@ import (
 func TestExcution(t *testing.T) {
 	i := 0
 	tables := []struct {
-		args   []string
-		result bool
+		args []string
 	}{
-		{[]string{"apply"}, false},
-		{[]string{"^&*%&^"}, false},
-		{[]string{"fmt"}, true},
-		{[]string{""}, false},
+		{[]string{"apply"}},
+		{[]string{"^&*%&^"}},
+		{[]string{"fmt"}},
+		{[]string{""}},
 	}
 
 	for i < len(tables) {
-		err = execution(tables[i].args)
-		if err != nil && tables[i].result {
-			t.Fatal(err.Error())
-		}
+		execution(tables[i].args)
 		i++
 	}
 }

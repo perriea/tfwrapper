@@ -2,17 +2,17 @@ package wrapper
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
+	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
-// readConfig : AWS || GCP || Azure
-func readConfig() (error, Configuration) {
+// readConfigYAML : Read config
+func readConfigYAML() (Configuration, error) {
 	i := 0
 	path := ""
 
@@ -25,9 +25,9 @@ func readConfig() (error, Configuration) {
 			subfolder = append(subfolder, "../")
 		} else {
 			// Get current directory
-			dir, err = os.Getwd()
+			dir, err = homedir.Dir()
 			if err != nil {
-				return err, Configuration{}
+				return Configuration{}, err
 			}
 
 			// Split path & generate good file
@@ -43,22 +43,23 @@ func readConfig() (error, Configuration) {
 			}
 
 			// Read file
-			viper.SetConfigName(config)
+			viper.SetConfigFile(config)
 			viper.AddConfigPath(path)
+			viper.SetConfigType("yaml")
 			if err = viper.ReadInConfig(); err != nil {
-				return err, Configuration{}
+				return Configuration{}, err
 			}
 
 			if err = viper.Unmarshal(&configuration); err != nil {
-				return err, Configuration{}
+				return Configuration{}, err
 			}
 
-			return nil, configuration
+			return configuration, nil
 		}
 		i++
 	}
 
-	return nil, Configuration{}
+	return Configuration{}, err
 }
 
 // existVarsConfig :
@@ -105,31 +106,31 @@ func writeVarsConfig() error {
 	return nil
 }
 
-func readVarsFile(configFile string) error {
-	// re-open file
-	file, err = os.OpenFile(configFile, os.O_RDWR, 0644)
-	if Error(err) {
-		return err
-	}
-	defer file.Close()
-
-	// read file, line by line
-	var text = make([]byte, 512)
-	for {
-		_, err = file.Read(text)
-
-		// break if finally arrived at end of file
-		if err == io.EOF {
-			break
-		}
-
-		// break if error occured
-		if err != nil && err != io.EOF {
-			return err
-		}
+// readConfigHCL config (terraform.tf)
+func readConfigHCL() (string, error) {
+	_, err = os.Stat(terraformVersionFile)
+	if os.IsNotExist(err) {
+		return "", err
 	}
 
-	fmt.Println("==> done reading from file")
-	fmt.Println(string(text))
-	return nil
+	dir, err = homedir.Dir()
+	viper.SetConfigFile(terraformVersionFile)
+	viper.AddConfigPath(dir)
+	viper.SetConfigType("hcl")
+	if err = viper.ReadInConfig(); err != nil {
+		return "", err
+	}
+
+	if err = viper.Unmarshal(&tfConfiguration); err != nil {
+		return "", err
+	}
+
+	if len(tfConfiguration.Terraform) > 0 {
+		if tfConfiguration.Terraform[0].Version != "" {
+			return tfConfiguration.Terraform[0].Version, nil
+		}
+		return "", nil
+	}
+
+	return "", nil
 }

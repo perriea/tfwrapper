@@ -6,6 +6,10 @@ import (
 	"github.com/perriea/tfwrapper/pkg/aws"
 )
 
+// func Lookup() {
+
+// }
+
 // Action application Terraform
 func Action(args []string) {
 	execution(args)
@@ -13,7 +17,7 @@ func Action(args []string) {
 
 // ActionAuth application terraform
 func ActionAuth(args []string, quiet bool) {
-	err, configuration := readConfig()
+	configuration, err := readConfigYAML()
 	if err != nil {
 		fmt.Println("\033[1;31mError: No configuration files found!\nApply requires configuration to be present.")
 	}

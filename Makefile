@@ -1,5 +1,5 @@
 ########################################
-#          TFVERSION MAKEFILE          #
+#          TFWRAPPER MAKEFILE          #
 #        Author: Aurelien PERRIER      #
 ########################################
 

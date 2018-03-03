@@ -3,15 +3,21 @@ package wrapper
 import (
 	"os"
 	"os/exec"
-)
 
-// func Lookup() {}
+	"github.com/perriea/tfversion/terraform"
+)
 
 // execution : Execute terraform command
 func execution(args []string) {
 
-	// err = terraform.Install("0.10.8")
-	// FatalError(err)
+	version, err := readConfigHCL()
+	if err != nil {
+		err = terraform.Install(terraformDefaultVersion, false)
+		FatalError(err)
+	} else {
+		err = terraform.Install(version, false)
+		FatalError(err)
+	}
 
 	// Prepare command with arguments
 	cmd := exec.Command(binary, args...)
