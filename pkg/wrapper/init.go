@@ -1,6 +1,10 @@
 package wrapper
 
-import "os"
+import (
+	"os"
+
+	"github.com/perriea/tfversion/terraform"
+)
 
 const terraformVersionFile = "terraform.tf"
 const terraformDefaultVersion = "0.10.8"
@@ -71,4 +75,8 @@ type TerraformConfig struct {
 }
 type terraformVersion struct {
 	Version string `mapstructure:"version"`
+}
+
+func init() {
+	terraform.InitFolder()
 }
