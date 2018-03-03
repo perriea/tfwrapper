@@ -5,5 +5,9 @@ go:
   - 1.9.x
   - tip
 
+# To avoid any failure
+before_install:
+  - mkdir -p ~/.tfversion/{tmp,bin}
+
 script:
   - make test
