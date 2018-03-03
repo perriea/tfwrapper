@@ -25,15 +25,15 @@ func readConfigYAML() (Configuration, error) {
 			subfolder = append(subfolder, "../")
 		} else {
 			// Get current directory
-			dir, err = homedir.Dir()
+			dir, err = os.Getwd()
 			if err != nil {
 				return Configuration{}, err
 			}
 
 			// Split path & generate good file
 			folder = strings.Split(dir, "/")
-			for k := i; k < len(folder); k++ {
-				if k == i {
+			for k := (i + 2); k < len(folder); k++ {
+				if k == (i + 2) {
 					config = fmt.Sprintf("%s_", folder[k])
 				} else if k == (len(folder) - 1) {
 					config = fmt.Sprintf("%s%s", config, folder[k])
@@ -59,10 +59,9 @@ func readConfigYAML() (Configuration, error) {
 		i++
 	}
 
-	return Configuration{}, err
+	return Configuration{}, nil
 }
 
-// existVarsConfig :
 func existVarsConfig() bool {
 
 	info, err = os.Stat(configFile)
