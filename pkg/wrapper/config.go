@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
@@ -23,6 +22,8 @@ func readYAMLConfig() (YAMLConfig, error) {
 	)
 
 	i = 0
+	config = ""
+	path = ""
 
 	// Read in five subdirectories
 	for i < maxRotate {
@@ -31,46 +32,40 @@ func readYAMLConfig() (YAMLConfig, error) {
 		_, err = os.Stat(path)
 		if os.IsNotExist(err) {
 			subfolder = append(subfolder, "../")
-		} else {
-			// Get current directory
-			dir, err = os.Getwd()
-			if err != nil {
-				return YAMLConfig{}, err
-			}
-
-			// Split path & generate good file
-			folder = strings.Split(dir, "/")
-			for k := (i + 2); k < len(folder); k++ {
-				if k == (i + 2) {
-					config = fmt.Sprintf("%s_", folder[k])
-				} else if k == (len(folder) - 1) {
-					config = fmt.Sprintf("%s%s", config, folder[k])
-				} else {
-					config = fmt.Sprintf("%s%s_", config, folder[k])
-				}
-			}
-
-			// Read file
-			viper.SetConfigName(config)
-			viper.AddConfigPath(path)
-			viper.SetConfigType("yaml")
-			if err = viper.ReadInConfig(); err != nil {
-				return YAMLConfig{}, err
-			}
-
-			if err = viper.Unmarshal(&yamlProvider); err != nil {
-				return YAMLConfig{}, err
-			}
-
-			return yamlProvider, nil
 		}
 		i++
 	}
 
-	return YAMLConfig{}, nil
+	dir, err = os.Getwd()
+	if err != nil {
+		return YAMLConfig{}, err
+	}
+
+	folder = strings.Split(dir, "/")
+	for k := (len(folder) - len(subfolder)); k < len(folder); k++ {
+		if (len(folder) - 1) == k {
+			config = fmt.Sprintf("%s%s", config, folder[k])
+		} else {
+			config = fmt.Sprintf("%s%s_", config, folder[k])
+		}
+	}
+
+	// Read file
+	viper.SetConfigName(config)
+	viper.AddConfigPath(path)
+	viper.SetConfigType("yaml")
+	if err = viper.ReadInConfig(); err != nil {
+		return YAMLConfig{}, err
+	}
+
+	if err = viper.Unmarshal(&yamlProvider); err != nil {
+		return YAMLConfig{}, err
+	}
+
+	return yamlProvider, nil
 }
 
-func existVarsConfig() bool {
+func validConfigAuth() bool {
 	var (
 		fileDate int
 		fileNow  int
@@ -95,7 +90,11 @@ func existVarsConfig() bool {
 }
 
 // writeVarsConfig func : Write config file
-func writeVarsConfig() error {
+func writeAuthConfig(provider string) error {
+	var (
+		config string
+	)
+
 	// open file using READ & CREATE permission
 	file, err = os.OpenFile(configFile, os.O_RDWR|os.O_CREATE, 0755)
 	if Error(err) {
@@ -103,8 +102,16 @@ func writeVarsConfig() error {
 	}
 	defer file.Close()
 
+	switch provider {
+	case "aws":
+		config = fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\nenv = \"%s\"", yamlProvider.Provider.General.Region, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Provider.General.Env)
+	case "gcp":
+		// impossible interpolation: https://github.com/hashicorp/terraform/issues/10059
+		config = fmt.Sprintf("gcp_credentials = \"%s\"\ngcp_project = \"%s\"\ngcp_region = \"%s\"\nenv = \"%s\"", yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project, yamlProvider.Provider.General.Region, yamlProvider.Provider.General.Env)
+	}
+
 	// write some text line-by-line to file
-	_, err = file.WriteString(fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", "eu-west-1", os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN")))
+	_, err = file.WriteString(config)
 	if Error(err) {
 		return err
 	}
@@ -115,37 +122,4 @@ func writeVarsConfig() error {
 		return err
 	}
 	return nil
-}
-
-// readConfigHCL config (terraform.tf)
-func readConfigHCL() (string, error) {
-	var (
-		dir string
-	)
-
-	_, err = os.Stat(terraformVersionFile)
-	if os.IsNotExist(err) {
-		return "", err
-	}
-
-	dir, err = homedir.Dir()
-	viper.SetConfigFile(terraformVersionFile)
-	viper.AddConfigPath(dir)
-	viper.SetConfigType("hcl")
-	if err = viper.ReadInConfig(); err != nil {
-		return "", err
-	}
-
-	if err = viper.Unmarshal(&hclTerraform); err != nil {
-		return "", err
-	}
-
-	if len(hclTerraform.Terraform) > 0 {
-		if hclTerraform.Terraform[0].Version != "" {
-			return hclTerraform.Terraform[0].Version, nil
-		}
-		return "", nil
-	}
-
-	return "", nil
 }

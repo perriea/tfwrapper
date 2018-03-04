@@ -4,8 +4,34 @@ import (
 	"testing"
 )
 
+// TestSwitchVersion : switch version of Terraform
+func TestSwitchVersion(t *testing.T) {
+	var (
+		i int
+	)
+
+	i = 0
+	tables := []struct {
+		version string
+		result  bool
+	}{
+		{"0.9.1", true},
+		{"0.10.9", false},
+		{"^&%&^", false},
+	}
+
+	for i < len(tables) {
+		yamlProvider.Terraform = tables[i].version
+		err = switchVersion()
+		if err != nil && !tables[i].result {
+			t.Error(err)
+		}
+		i++
+	}
+}
+
 // TestExecution : Execute command
-func TestExcution(t *testing.T) {
+func TestExecCmd(t *testing.T) {
 	var (
 		i int
 	)
@@ -21,7 +47,7 @@ func TestExcution(t *testing.T) {
 	}
 
 	for i < len(tables) {
-		execution(tables[i].args)
+		execCmd(tables[i].args)
 		i++
 	}
 }
