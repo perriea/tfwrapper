@@ -48,8 +48,9 @@ client
 
 ## Roadmap
 
-* Support Google Cloud Plateform
-* Support Azure
+* Support Google Cloud Plateform,
+* Support Azure,
+* Windows Support
 
 ## Licence
 
