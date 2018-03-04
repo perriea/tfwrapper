@@ -9,8 +9,12 @@ import (
 
 // execution : Execute terraform command
 func execution(args []string) {
+	var (
+		version string
+		cmd     *exec.Cmd
+	)
 
-	version, err := readConfigHCL()
+	version, err = readConfigHCL()
 	if err != nil {
 		err = terraform.Install(terraformDefaultVersion, false)
 		FatalError(err)
@@ -20,7 +24,7 @@ func execution(args []string) {
 	}
 
 	// Prepare command with arguments
-	cmd := exec.Command(binary, args...)
+	cmd = exec.Command(binary, args...)
 
 	// redirect stdout/err/in
 	cmd.Stdout = os.Stdout

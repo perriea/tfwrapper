@@ -11,13 +11,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-// readConfigYAML : Read config
-func readConfigYAML() (Configuration, error) {
-	i := 0
-	path := ""
+// readYAMLConfig : Read config
+func readYAMLConfig() (YAMLConfig, error) {
+	var (
+		i         int
+		path      string
+		dir       string
+		config    string
+		subfolder []string
+		folder    []string
+	)
+
+	i = 0
 
 	// Read in five subdirectories
-	for i < 5 {
+	for i < maxRotate {
 		// Check if folder exist
 		path = fmt.Sprintf("%s%s", strings.Join(subfolder, ""), "conf")
 		_, err = os.Stat(path)
@@ -27,7 +35,7 @@ func readConfigYAML() (Configuration, error) {
 			// Get current directory
 			dir, err = os.Getwd()
 			if err != nil {
-				return Configuration{}, err
+				return YAMLConfig{}, err
 			}
 
 			// Split path & generate good file
@@ -43,38 +51,42 @@ func readConfigYAML() (Configuration, error) {
 			}
 
 			// Read file
-			viper.SetConfigFile(config)
+			viper.SetConfigName(config)
 			viper.AddConfigPath(path)
 			viper.SetConfigType("yaml")
 			if err = viper.ReadInConfig(); err != nil {
-				return Configuration{}, err
+				return YAMLConfig{}, err
 			}
 
-			if err = viper.Unmarshal(&configuration); err != nil {
-				return Configuration{}, err
+			if err = viper.Unmarshal(&yamlProvider); err != nil {
+				return YAMLConfig{}, err
 			}
 
-			return configuration, nil
+			return yamlProvider, nil
 		}
 		i++
 	}
 
-	return Configuration{}, nil
+	return YAMLConfig{}, nil
 }
 
 func existVarsConfig() bool {
+	var (
+		fileDate int
+		fileNow  int
+	)
 
+	// File exist or not
 	info, err = os.Stat(configFile)
 	if os.IsNotExist(err) {
 		return false
 	}
 
-	fileDate, err := strconv.Atoi(info.ModTime().Format("20060102150405"))
+	// Convert string (hour) to int
+	fileDate, err = strconv.Atoi(info.ModTime().Format("20060102150405"))
 	FatalError(err)
-
-	fileNow, err := strconv.Atoi(time.Now().Format("20060102150405"))
+	fileNow, err = strconv.Atoi(time.Now().Format("20060102150405"))
 	FatalError(err)
-
 	if (fileNow - fileDate) > durationSess {
 		return false
 	}
@@ -107,6 +119,10 @@ func writeVarsConfig() error {
 
 // readConfigHCL config (terraform.tf)
 func readConfigHCL() (string, error) {
+	var (
+		dir string
+	)
+
 	_, err = os.Stat(terraformVersionFile)
 	if os.IsNotExist(err) {
 		return "", err
@@ -120,13 +136,13 @@ func readConfigHCL() (string, error) {
 		return "", err
 	}
 
-	if err = viper.Unmarshal(&tfConfiguration); err != nil {
+	if err = viper.Unmarshal(&hclTerraform); err != nil {
 		return "", err
 	}
 
-	if len(tfConfiguration.Terraform) > 0 {
-		if tfConfiguration.Terraform[0].Version != "" {
-			return tfConfiguration.Terraform[0].Version, nil
+	if len(hclTerraform.Terraform) > 0 {
+		if hclTerraform.Terraform[0].Version != "" {
+			return hclTerraform.Terraform[0].Version, nil
 		}
 		return "", nil
 	}

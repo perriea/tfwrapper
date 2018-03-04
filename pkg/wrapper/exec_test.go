@@ -6,7 +6,11 @@ import (
 
 // TestExecution : Execute command
 func TestExcution(t *testing.T) {
-	i := 0
+	var (
+		i int
+	)
+
+	i = 0
 	tables := []struct {
 		args []string
 	}{

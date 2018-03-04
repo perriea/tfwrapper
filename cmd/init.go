@@ -4,6 +4,13 @@ import (
 	"os"
 )
 
+var (
+	c    map[string]CommandFactory
+	args []string
+	err  error
+)
+
+// CommandFactory mapping
 type CommandFactory func() Command
 
 // Command Terraform
@@ -14,13 +21,11 @@ type Command struct {
 	Quiet         bool
 }
 
-var (
-	c    map[string]CommandFactory
-	args []string
-	err  error
-)
-
 func init() {
+	// stdin terminal
+	args = os.Args[1:]
+
+	// CommandFactory mapping
 	c = map[string]CommandFactory{
 		"apply": func() Command {
 			return Command{
@@ -172,6 +177,4 @@ func init() {
 			}
 		},
 	}
-
-	args = os.Args[1:]
 }

@@ -6,71 +6,56 @@ import (
 	"github.com/perriea/tfversion/terraform"
 )
 
+// Files
 const terraformVersionFile = "terraform.tf"
-const terraformDefaultVersion = "0.10.8"
-
 const configFile = "terraform.tfvars"
 const binary = "terraform"
+
+// Wrapper
+const terraformDefaultVersion = "0.10.8"
+const maxRotate = 5
+
+// AWS
 const durationSess = 900
 
 var (
 	profile *string
-
-	config string
-	dir    string
-
-	data []string
-	// Read config
-	subfolder []string
-	folder    []string
 
 	// File info
 	file *os.File
 	info os.FileInfo
 
 	// Configuration wrapper
-	configuration   Configuration
-	tfConfiguration TerraformConfig
+	yamlProvider YAMLConfig
+	hclTerraform HCLConfig
 
 	err error
 )
 
-// General Vars
-type General struct {
+// YAMLConfig Config YAML
+type YAMLConfig struct {
+	AWS aws `yaml:"aws"`
+}
+
+// Amazon Web Service
+type aws struct {
+	General     awsGeneral     `yaml:"general"`
+	Credentials awsCredentials `yaml:"credentials"`
+}
+
+type awsGeneral struct {
 	Account string `yaml:"account"`
 	Region  string `yaml:"region"`
+	Env     string `yaml:"env"`
 }
 
-// Configuration file wrapper
-type Configuration struct {
-	Aws       Aws       `yaml:"aws"`
-	Terraform Terraform `yaml:"terraform"`
-}
-
-// Aws Config
-type Aws struct {
-	General     General     `yaml:"general"`
-	Credentials Credentials `yaml:"credentials"`
-}
-
-// Terraform Vars
-type Terraform struct {
-	Vars Vars `yaml:"vars"`
-}
-
-// Vars Clients
-type Vars struct {
-	AwsAccount string `yaml:"aws_account"`
-	ClientName string `yaml:"client_name"`
-}
-
-// Credentials AWS
-type Credentials struct {
+type awsCredentials struct {
 	Profile string `yaml:"profile"`
 	Role    string `yaml:"role"`
 }
 
-type TerraformConfig struct {
+// HCLConfig : Config HCL Version
+type HCLConfig struct {
 	Terraform []terraformVersion
 }
 type terraformVersion struct {
