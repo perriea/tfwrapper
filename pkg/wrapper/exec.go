@@ -7,21 +7,22 @@ import (
 	"github.com/perriea/tfversion/terraform"
 )
 
-// execution : Execute terraform command
-func execution(args []string) {
-	var (
-		version string
-		cmd     *exec.Cmd
-	)
-
-	version, err = readConfigHCL()
-	if err != nil {
-		err = terraform.Install(terraformDefaultVersion, false)
-		FatalError(err)
-	} else {
-		err = terraform.Install(version, false)
-		FatalError(err)
+func switchVersion() error {
+	// version, err = readConfigHCL()
+	if yamlProvider.Terraform != "" {
+		err = terraform.Install(yamlProvider.Terraform, false)
+		return err
 	}
+
+	err = terraform.Install(terraformDefaultVersion, false)
+	return err
+}
+
+// execution : Execute terraform command
+func execCmd(args []string) {
+	var (
+		cmd *exec.Cmd
+	)
 
 	// Prepare command with arguments
 	cmd = exec.Command(binary, args...)

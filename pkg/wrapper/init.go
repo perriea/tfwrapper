@@ -34,22 +34,25 @@ var (
 
 // YAMLConfig Config YAML
 type YAMLConfig struct {
-	AWS aws `yaml:"aws"`
+	Terraform string   `yaml:"terraform"`
+	Cloud     string   `yaml:"cloud"`
+	Provider  provider `yaml:"provider"`
 }
 
 // Amazon Web Service
-type aws struct {
-	General     awsGeneral     `yaml:"general"`
-	Credentials awsCredentials `yaml:"credentials"`
+type provider struct {
+	General     general     `yaml:"general"`
+	Credentials credentials `yaml:"credentials"`
 }
 
-type awsGeneral struct {
-	Account string `yaml:"account"`
+type general struct {
 	Region  string `yaml:"region"`
 	Env     string `yaml:"env"`
+	Project string `yaml:"project"` // only google
+	Account string `yaml:"account"`
 }
 
-type awsCredentials struct {
+type credentials struct {
 	Profile string `yaml:"profile"`
 	Role    string `yaml:"role"`
 }

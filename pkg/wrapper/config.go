@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
@@ -70,7 +69,7 @@ func readYAMLConfig() (YAMLConfig, error) {
 	return YAMLConfig{}, nil
 }
 
-func existVarsConfig() bool {
+func validConfigAuth() bool {
 	var (
 		fileDate int
 		fileNow  int
@@ -95,7 +94,11 @@ func existVarsConfig() bool {
 }
 
 // writeVarsConfig func : Write config file
-func writeVarsConfig() error {
+func writeAuthConfig(provider string) error {
+	var (
+		config string
+	)
+
 	// open file using READ & CREATE permission
 	file, err = os.OpenFile(configFile, os.O_RDWR|os.O_CREATE, 0755)
 	if Error(err) {
@@ -103,8 +106,15 @@ func writeVarsConfig() error {
 	}
 	defer file.Close()
 
+	switch provider {
+	case "aws":
+		config = fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", yamlProvider.Provider.General.Region, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"))
+	case "gcp":
+		config = fmt.Sprintf("gcp_credentials = \"${file(\"%s\")}\"\ngcp_project = \"%s\"gcp_region = \"%s\"", yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project, yamlProvider.Provider.General.Region)
+	}
+
 	// write some text line-by-line to file
-	_, err = file.WriteString(fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", "eu-west-1", os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN")))
+	_, err = file.WriteString(config)
 	if Error(err) {
 		return err
 	}
@@ -118,34 +128,34 @@ func writeVarsConfig() error {
 }
 
 // readConfigHCL config (terraform.tf)
-func readConfigHCL() (string, error) {
-	var (
-		dir string
-	)
+// func readConfigHCL() (string, error) {
+// 	var (
+// 		dir string
+// 	)
 
-	_, err = os.Stat(terraformVersionFile)
-	if os.IsNotExist(err) {
-		return "", err
-	}
+// 	_, err = os.Stat(terraformVersionFile)
+// 	if os.IsNotExist(err) {
+// 		return "", err
+// 	}
 
-	dir, err = homedir.Dir()
-	viper.SetConfigFile(terraformVersionFile)
-	viper.AddConfigPath(dir)
-	viper.SetConfigType("hcl")
-	if err = viper.ReadInConfig(); err != nil {
-		return "", err
-	}
+// 	dir, err = homedir.Dir()
+// 	viper.SetConfigFile(terraformVersionFile)
+// 	viper.AddConfigPath(dir)
+// 	viper.SetConfigType("hcl")
+// 	if err = viper.ReadInConfig(); err != nil {
+// 		return "", err
+// 	}
 
-	if err = viper.Unmarshal(&hclTerraform); err != nil {
-		return "", err
-	}
+// 	if err = viper.Unmarshal(&hclTerraform); err != nil {
+// 		return "", err
+// 	}
 
-	if len(hclTerraform.Terraform) > 0 {
-		if hclTerraform.Terraform[0].Version != "" {
-			return hclTerraform.Terraform[0].Version, nil
-		}
-		return "", nil
-	}
+// 	if len(hclTerraform.Terraform) > 0 {
+// 		if hclTerraform.Terraform[0].Version != "" {
+// 			return hclTerraform.Terraform[0].Version, nil
+// 		}
+// 		return "", nil
+// 	}
 
-	return "", nil
-}
+// 	return "", nil
+// }
