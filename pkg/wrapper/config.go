@@ -127,36 +127,3 @@ func writeAuthConfig(provider string) error {
 	}
 	return nil
 }
-
-// readConfigHCL config (terraform.tf)
-// func readConfigHCL() (string, error) {
-// 	var (
-// 		dir string
-// 	)
-
-// 	_, err = os.Stat(terraformVersionFile)
-// 	if os.IsNotExist(err) {
-// 		return "", err
-// 	}
-
-// 	dir, err = homedir.Dir()
-// 	viper.SetConfigFile(terraformVersionFile)
-// 	viper.AddConfigPath(dir)
-// 	viper.SetConfigType("hcl")
-// 	if err = viper.ReadInConfig(); err != nil {
-// 		return "", err
-// 	}
-
-// 	if err = viper.Unmarshal(&hclTerraform); err != nil {
-// 		return "", err
-// 	}
-
-// 	if len(hclTerraform.Terraform) > 0 {
-// 		if hclTerraform.Terraform[0].Version != "" {
-// 			return hclTerraform.Terraform[0].Version, nil
-// 		}
-// 		return "", nil
-// 	}
-
-// 	return "", nil
-// }
