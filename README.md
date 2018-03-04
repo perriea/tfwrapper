@@ -6,53 +6,24 @@
 
 ## Features
 
-* AWS applications,
-* Switching role (AWS STS),
-* Autoswitch terraform version (based on file `terraform.tf`),
+* AWS applications (switching role with AWS STS),
+* Google applications,
+* Autoswitch terraform version,
 * Possibility to use all feature of Terraform.
 
 ## Requirements
 
-* Credential AWS,
-* Using AWS STS service with MFA (recommanded).
+* Credentials AWS,
+* Using AWS STS service with MFA (recommanded),
+* Credentials GCloud (JSON).
 
-### Terraform architecture
+### Terraform architecture & Config
 
-**Example 1 :**
-```
-client
-├── conf
-│   └── client_project_region_stack.yml
-└── project
-    └── region
-        └── stack
-            ├── features.tf
-            ├── inputs.tf
-            ├── main.tf
-            ├── outputs.tf
-            └── terraform.tf
-```
-
-**Example 2 :**
-```
-client
-├── conf
-│   └── project_env_region_stack.yml
-└── project
-    └── env
-        └── region
-            └── stack
-                ├── features.tf
-                ├── inputs.tf
-                ├── main.tf
-                ├── outputs.tf
-                └── terraform.tf
-```
+Look on `examples` folder :)
 
 ## Roadmap
 
-* Support Google Cloud Plateform,
-* Support Azure,
+* Support Microsoft Azure,
 * Windows Support.
 
 ## Licence
