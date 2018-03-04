@@ -22,6 +22,8 @@ func readYAMLConfig() (YAMLConfig, error) {
 	)
 
 	i = 0
+	config = ""
+	path = ""
 
 	// Read in five subdirectories
 	for i < maxRotate {
@@ -30,43 +32,37 @@ func readYAMLConfig() (YAMLConfig, error) {
 		_, err = os.Stat(path)
 		if os.IsNotExist(err) {
 			subfolder = append(subfolder, "../")
-		} else {
-			// Get current directory
-			dir, err = os.Getwd()
-			if err != nil {
-				return YAMLConfig{}, err
-			}
-
-			// Split path & generate good file
-			folder = strings.Split(dir, "/")
-			for k := (i + 2); k < len(folder); k++ {
-				if k == (i + 2) {
-					config = fmt.Sprintf("%s_", folder[k])
-				} else if k == (len(folder) - 1) {
-					config = fmt.Sprintf("%s%s", config, folder[k])
-				} else {
-					config = fmt.Sprintf("%s%s_", config, folder[k])
-				}
-			}
-
-			// Read file
-			viper.SetConfigName(config)
-			viper.AddConfigPath(path)
-			viper.SetConfigType("yaml")
-			if err = viper.ReadInConfig(); err != nil {
-				return YAMLConfig{}, err
-			}
-
-			if err = viper.Unmarshal(&yamlProvider); err != nil {
-				return YAMLConfig{}, err
-			}
-
-			return yamlProvider, nil
 		}
 		i++
 	}
 
-	return YAMLConfig{}, nil
+	dir, err = os.Getwd()
+	if err != nil {
+		return YAMLConfig{}, err
+	}
+
+	folder = strings.Split(dir, "/")
+	for k := (len(folder) - len(subfolder)); k < len(folder); k++ {
+		if (len(folder) - 1) == k {
+			config = fmt.Sprintf("%s%s", config, folder[k])
+		} else {
+			config = fmt.Sprintf("%s%s_", config, folder[k])
+		}
+	}
+
+	// Read file
+	viper.SetConfigName(config)
+	viper.AddConfigPath(path)
+	viper.SetConfigType("yaml")
+	if err = viper.ReadInConfig(); err != nil {
+		return YAMLConfig{}, err
+	}
+
+	if err = viper.Unmarshal(&yamlProvider); err != nil {
+		return YAMLConfig{}, err
+	}
+
+	return yamlProvider, nil
 }
 
 func validConfigAuth() bool {
