@@ -108,9 +108,10 @@ func writeAuthConfig(provider string) error {
 
 	switch provider {
 	case "aws":
-		config = fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"", yamlProvider.Provider.General.Region, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"))
+		config = fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\nenv = \"%s\"", yamlProvider.Provider.General.Region, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Provider.General.Env)
 	case "gcp":
-		config = fmt.Sprintf("gcp_credentials = \"${file(\"%s\")}\"\ngcp_project = \"%s\"gcp_region = \"%s\"", yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project, yamlProvider.Provider.General.Region)
+		// impossible interpolation: https://github.com/hashicorp/terraform/issues/10059
+		config = fmt.Sprintf("gcp_credentials = \"%s\"\ngcp_project = \"%s\"\ngcp_region = \"%s\"\nenv = \"%s\"", yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project, yamlProvider.Provider.General.Region, yamlProvider.Provider.General.Env)
 	}
 
 	// write some text line-by-line to file
