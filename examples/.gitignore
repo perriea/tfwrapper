@@ -1,0 +1,2 @@
+project/eu-west-1/cdn/{.terraform,terraform.*}
+project/europe-west1/kubernetes/{.terraform,terraform.*}

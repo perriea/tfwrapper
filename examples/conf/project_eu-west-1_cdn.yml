@@ -1,0 +1,11 @@
+---
+cloud: 'aws'
+terraform: '0.10.8'
+provider:
+  general:
+    account: 'XXXXXXXXXXXXXX'
+    region: 'eu-west-1'
+    env: 'prod'
+  credentials:
+    profile: my-profile
+    role: my-role
