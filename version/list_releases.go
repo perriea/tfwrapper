@@ -6,7 +6,11 @@ import (
 
 // LastVersion : Check last version of package
 func LastVersion() (bool, *github.RepositoryRelease) {
-	releases, _, err := client.Repositories.ListReleases(ctx, "perriea", "tfwrapper", nil)
+	var (
+		releases []*github.RepositoryRelease
+	)
+
+	releases, _, err = client.Repositories.ListReleases(ctx, "perriea", "tfwrapper", nil)
 	if err != nil {
 		return true, nil
 	}

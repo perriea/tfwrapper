@@ -6,8 +6,8 @@ import (
 
 // String returns the complete version string, including prerelease
 func String() string {
-	if Prerelease != "" {
-		return fmt.Sprintf("%s-%s", Version, Prerelease)
+	if prerelease != "" {
+		return fmt.Sprintf("%s-%s", Version, prerelease)
 	}
 	return Version
 }
