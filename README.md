@@ -2,18 +2,19 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/perriea/tfwrapper)](https://goreportcard.com/report/github.com/perriea/tfwrapper) [![Build Status](https://travis-ci.org/perriea/tfwrapper.svg?branch=master)](https://travis-ci.org/perriea/tfwrapper) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`tfwrapper` is a command created to apply best practices Terraform.
+`tfwrapper` is a command created to apply best practices Terraform & Cloud Providers.
 
 ## Features
 
 * AWS applications,
 * Switching role (AWS STS),
-* Possibility to use all feature of Terraform
+* Autoswitch terraform version (based on file `terraform.tf`),
+* Possibility to use all feature of Terraform.
 
 ## Requirements
 
-* Credential AWS
-* Using switch role AWS with MFA (recommanded by AWS)
+* Credential AWS,
+* Using AWS STS service with MFA (recommanded).
 
 ### Terraform architecture
 
@@ -28,6 +29,7 @@ client
             ├── features.tf
             ├── inputs.tf
             ├── main.tf
+            ├── outputs.tf
             └── terraform.tf
 ```
 
@@ -43,6 +45,7 @@ client
                 ├── features.tf
                 ├── inputs.tf
                 ├── main.tf
+                ├── outputs.tf
                 └── terraform.tf
 ```
 
@@ -50,10 +53,9 @@ client
 
 * Support Google Cloud Plateform,
 * Support Azure,
-* Windows Support
+* Windows Support.
 
 ## Licence
 
-Source code can be found on [Github](https://github.com/georgeOsdDev/markdown-edit), licenced under [MIT](http://opensource.org/licenses/mit-license.php).
-
+Licence [MIT](http://opensource.org/licenses/mit-license.php)   
 Developed by [Aurelien Perrier](http://about.me/perriea)
