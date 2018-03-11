@@ -58,6 +58,6 @@ vet:
 	fi
 
 clean:
-	$(RM) -rf ${BIN_FOLDER}
+	$(RM) ${BIN}
 
 .PHONY: help build install fmt vendor-status vendor-list vendor-update docker test vet clean
