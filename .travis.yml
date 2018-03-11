@@ -16,6 +16,7 @@ before_install:
 
 script:
   - make test
+  - make vet
 
 notifications:
   email:
