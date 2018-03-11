@@ -6,4 +6,5 @@ LABEL APP "tfwrapper"
 ENV TERRAFORM_PATH /root/.tfversion/bin
 ENV PATH "$PATH:${TERRAFORM_PATH}"
 
-COPY ./tfwrapper /usr/bin
+# Copy binary
+COPY bin/tfwrapper /usr/bin
