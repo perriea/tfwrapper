@@ -16,7 +16,6 @@ before_install:
 
 script:
   - make test
-  - make vendor-status
   - make vet
 
 notifications:
