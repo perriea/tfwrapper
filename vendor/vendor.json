@@ -267,10 +267,6 @@
 			"revisionTime": "2018-03-03T15:59:28Z"
 		},
 		{
-			"path": "github.com/perriea/tfwrapper/terraform",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "M57Rrfc8Z966p+IBtQ91QOcUtcg=",
 			"path": "github.com/ryanuber/columnize",
 			"revision": "abc90934186a77966e2beeac62ed966aac0561d5",
