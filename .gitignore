@@ -12,6 +12,13 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
-terraform.tfstate
-tfwrapper
+
+# Destination of compilation
+bin/
+dist/
+tfwrapper*
+
+# Terraform files
 terraform.tfvars
+terraform.tfstate*
+.terraform*
