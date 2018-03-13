@@ -1,0 +1,26 @@
+workspace:
+  base: /go
+  path: src/github.com/perriea/tfwrapper
+
+pipeline:
+  test:
+    image: golang:${GO_CONTAINER}
+    commands:
+      - make test
+      - make vet
+
+matrix:
+  GO_CONTAINER:
+    - 1.8
+    - 1.9
+    - 1.10
+    - "latest"
+  allow_failures:
+    - "latest"
+
+notifications:
+  email:
+    recipients:
+    - a.perrier89@gmail.com
+    on_success: change
+    on_failure: always
