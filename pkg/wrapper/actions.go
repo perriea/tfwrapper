@@ -6,10 +6,7 @@ import (
 
 // Action application Terraform
 func Action(args []string) {
-	if err = switchVersion(); err != nil {
-		panic(err)
-	}
-
+	FatalError(switchVersion())
 	execCmd(args)
 }
 
@@ -20,10 +17,7 @@ func ActionAuth(args []string, quiet bool) {
 	if err != nil {
 		fmt.Printf("\033[1;31m%s\033[1;0m\n", err.Error())
 	} else {
-		if err = switchVersion(); err != nil {
-			panic(err)
-		}
-
+		FatalError(switchVersion())
 		lookupProvider(quiet)
 		execCmd(args)
 	}

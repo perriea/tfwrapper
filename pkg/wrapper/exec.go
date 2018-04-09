@@ -8,7 +8,6 @@ import (
 )
 
 func switchVersion() error {
-	// version, err = readConfigHCL()
 	if yamlProvider.Terraform != "" {
 		err = terraform.Install(yamlProvider.Terraform, false)
 		return err
