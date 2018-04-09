@@ -1,8 +1,6 @@
 package wrapper
 
 import (
-	"os"
-
 	"github.com/perriea/tfversion/terraform"
 )
 
@@ -15,15 +13,11 @@ const binary = "terraform"
 const terraformDefaultVersion = "0.10.8"
 const maxRotate = 5
 
-// AWS
+// AWS STS
 const durationSess = 900
 
 var (
 	profile *string
-
-	// File info
-	file *os.File
-	info os.FileInfo
 
 	// Configuration wrapper
 	yamlProvider YAMLConfig

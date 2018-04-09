@@ -263,8 +263,8 @@
 		{
 			"checksumSHA1": "DKEI1b3HXCVUgp6umat3Zj7fI4A=",
 			"path": "github.com/perriea/tfversion/terraform",
-			"revision": "3371805c4a79eaea2699972859fa65cbb22ca097",
-			"revisionTime": "2018-03-03T15:59:28Z"
+			"revision": "ea282c53e000112d091b941fc1609b97d5ce92f4",
+			"revisionTime": "2018-03-14T23:46:48Z"
 		},
 		{
 			"checksumSHA1": "M57Rrfc8Z966p+IBtQ91QOcUtcg=",
@@ -303,10 +303,10 @@
 			"revisionTime": "2018-02-20T14:32:36Z"
 		},
 		{
-			"checksumSHA1": "GWX9W5F1QBqLZsS1bYsG3jXjb3g=",
+			"checksumSHA1": "AB/VGCv0NIjGYZXhJUBSbVIsOJw=",
 			"path": "github.com/spf13/viper",
-			"revision": "aafc9e6bc7b7bb53ddaa75a5ef49a17d6e654be5",
-			"revisionTime": "2017-11-29T09:51:06Z"
+			"revision": "8dc2790b029dc41e2b8ff772c63c26adbb1db70d",
+			"revisionTime": "2018-03-22T07:00:28Z"
 		},
 		{
 			"checksumSHA1": "hYsuWh8Zj6z+8rFsK7F7mABIR44=",

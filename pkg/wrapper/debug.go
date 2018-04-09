@@ -11,11 +11,3 @@ func FatalError(err error) {
 		panic(err)
 	}
 }
-
-// Error function
-func Error(err error) bool {
-	if err != nil {
-		return true
-	}
-	return false
-}
