@@ -13,6 +13,7 @@ matrix:
 
 before_script:
   - mkdir -p ~/.tfversion/{tmp,bin}
+  - go get -u github.com/kardianos/govendor
 
 script:
   - make test
