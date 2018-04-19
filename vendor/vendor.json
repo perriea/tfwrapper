@@ -183,6 +183,18 @@
 			"revisionTime": "2016-12-03T19:45:07Z"
 		},
 		{
+			"checksumSHA1": "YAGTGSh0AOZLGWTUR5N9usMiV1Q=",
+			"path": "github.com/perriea/tfversion/terraform",
+			"revision": "35c5c776af3a3cd2dfc9106c6e42859c16d5e408",
+			"revisionTime": "2018-04-12T21:18:40Z"
+		},
+		{
+			"checksumSHA1": "M57Rrfc8Z966p+IBtQ91QOcUtcg=",
+			"path": "github.com/ryanuber/columnize",
+			"revision": "abc90934186a77966e2beeac62ed966aac0561d5",
+			"revisionTime": "2017-07-03T20:58:27Z"
+		},
+		{
 			"checksumSHA1": "9rHYsLhBBlXcAX7uiZX5v1KlPTk=",
 			"path": "gopkg.in/ini.v1",
 			"revision": "ace140f73450505f33e8b8418216792275ae82a7",
