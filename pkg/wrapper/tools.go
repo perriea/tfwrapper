@@ -2,7 +2,6 @@ package wrapper
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/google/go-github/github"
 	"github.com/perriea/tfwrapper/version"
@@ -24,6 +23,5 @@ func DisplayVersion() {
 
 // Help : show help
 func Help() {
-	preExecCmd(false, true)
-	os.Exit(0)
+	ExecCmd([]string{}, false, true)
 }
