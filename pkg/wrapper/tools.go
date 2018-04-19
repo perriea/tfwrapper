@@ -24,6 +24,6 @@ func DisplayVersion() {
 
 // Help : show help
 func Help() {
-	Action([]string{})
+	preExecCmd(false, true)
 	os.Exit(0)
 }
