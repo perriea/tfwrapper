@@ -22,6 +22,6 @@ func DisplayVersion() {
 }
 
 // Help : show help
-func Help() {
-	ExecCmd([]string{}, false, true)
+func Help() error {
+	return ExecCmd([]string{}, false, true)
 }

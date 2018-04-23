@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/perriea/tfwrapper/pkg/wrapper"
 )
 
@@ -15,6 +17,9 @@ func Run() {
 		for cli, object := range c {
 			if cli == args[0] {
 				if object().Terraform {
+					if err = wrapper.PreExecCmd(object().Authenticated, object().Quiet); err != nil {
+						fmt.Println(err.Error())
+					}
 					wrapper.ExecCmd(args, object().Authenticated, object().Quiet)
 				}
 				// future external commands

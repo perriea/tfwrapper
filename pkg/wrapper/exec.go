@@ -5,21 +5,21 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/perriea/tfversion/terraform"
+	tfversion "github.com/perriea/tfversion/terraform"
 )
 
 func switchVersion() error {
-	if yamlProvider.Provider.Version.Terraform != "" {
-		if err = terraform.Install(yamlProvider.Provider.Version.Terraform, true); err != nil {
+	if yamlProvider.Terraform.Version != "" {
+		if err = tfversion.Install(yamlProvider.Terraform.Version, true); err != nil {
 			return err
 		}
 	}
 
-	return terraform.Install(terraformDefaultVersion, true)
+	return tfversion.Install(terraformDefaultVersion, true)
 }
 
 // PreExecCmd application Terraform
-func preExecCmd(authenticated bool, quiet bool) error {
+func PreExecCmd(authenticated bool, quiet bool) error {
 	// read YAML config
 	yamlProvider, err = readYAMLConfig()
 	if err != nil {
@@ -41,10 +41,6 @@ func preExecCmd(authenticated bool, quiet bool) error {
 // ExecCmd : Execute terraform command
 func ExecCmd(args []string, authenticated bool, quiet bool) error {
 	var cmd *exec.Cmd
-
-	if err = preExecCmd(authenticated, quiet); err != nil {
-		return err
-	}
 
 	// exec && redirect stdout/err/in
 	cmd = exec.Command(binary, args...)

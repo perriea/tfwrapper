@@ -90,7 +90,7 @@ func writeAuthConfig(provider string) error {
 	defer file.Close()
 
 	config = fmt.Sprintf("provider = \"%s\"\nregion = \"%s\"\nenv = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\ngcp_credentials = \"%s\"\ngcp_project = \"%s\"",
-		yamlProvider.Provider.Version, yamlProvider.Provider.General.Region, yamlProvider.Provider.General.Env, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project)
+		yamlProvider.Terraform.Provider, yamlProvider.Terraform.General.Region, yamlProvider.Terraform.General.Env, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Terraform.Credentials.Profile, yamlProvider.Terraform.General.Project)
 
 	// write some text line-by-line to file
 	_, err = file.WriteString(config)

@@ -23,14 +23,15 @@ var (
 
 // YAMLConfig Config YAML
 type YAMLConfig struct {
-	Cloud    string   `yaml:"cloud"`
-	Provider provider `yaml:"provider"`
+	Cloud     string    `yaml:"cloud"`
+	Terraform terraform `yaml:"terraform"`
 }
 
-type provider struct {
+type terraform struct {
+	Version     string      `yaml:"version"`
+	Provider    string      `yaml:"provider"`
 	General     general     `yaml:"general"`
 	Credentials credentials `yaml:"credentials"`
-	Version     versions    `yaml:"versions"`
 }
 
 type general struct {
@@ -43,10 +44,4 @@ type general struct {
 type credentials struct {
 	Profile string `yaml:"profile"`
 	Role    string `yaml:"role"`
-}
-
-// Version : Config HCL Version
-type versions struct {
-	Terraform string `yaml:"terraform"`
-	Provider  string `yaml:"provider"`
 }
