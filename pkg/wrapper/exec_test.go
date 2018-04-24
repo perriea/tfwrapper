@@ -25,7 +25,7 @@ func TestSwitchVersion(t *testing.T) {
 	}
 
 	for i < len(tables) {
-		yamlProvider.Provider.Version.Terraform = tables[i].version
+		yamlProvider.Terraform.Version = tables[i].version
 		err = switchVersion()
 		if err != nil && !tables[i].result {
 			t.Error(err)

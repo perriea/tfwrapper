@@ -29,7 +29,6 @@ type YAMLConfig struct {
 
 type terraform struct {
 	Version     string      `yaml:"version"`
-	Provider    string      `yaml:"provider"`
 	General     general     `yaml:"general"`
 	Credentials credentials `yaml:"credentials"`
 }
