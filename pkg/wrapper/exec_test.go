@@ -15,13 +15,17 @@ func TestSwitchVersion(t *testing.T) {
 		version string
 		result  bool
 	}{
+		{"", false},
+		{"0", false},
+		{"0.0.1", false},
+		{"0.7.0", true},
 		{"0.9.1", true},
 		{"0.10.9", false},
 		{"^&%&^", false},
 	}
 
 	for i < len(tables) {
-		yamlProvider.Terraform = tables[i].version
+		yamlProvider.Terraform.Version = tables[i].version
 		err = switchVersion()
 		if err != nil && !tables[i].result {
 			t.Error(err)
@@ -32,22 +36,21 @@ func TestSwitchVersion(t *testing.T) {
 
 // TestExecution : Execute command
 func TestExecCmd(t *testing.T) {
-	var (
-		i int
-	)
+	var i int
 
 	i = 0
 	tables := []struct {
 		args []string
 	}{
-		{[]string{"apply"}},
+		{[]string{"plan"}},
 		{[]string{"^&*%&^"}},
 		{[]string{"fmt"}},
 		{[]string{""}},
 	}
 
 	for i < len(tables) {
-		execCmd(tables[i].args)
+		ExecCmd(tables[i].args, false, true)
+
 		i++
 	}
 }

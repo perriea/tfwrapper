@@ -1,9 +1,17 @@
-resource "google_storage_bucket" "image-store" {
-  name     = "${var.env}-image-store-${var.gcp_region}"
-  location = "EU"
+resource "random_string" "password" {
+  length  = 16
+  special = true
+  number  = true
+  lower   = true
+  upper   = true
+}
 
-  website {
-    main_page_suffix = "index.html"
-    not_found_page   = "404.html"
-  }
+module "gke-cluster" {
+  source = "github.com/google-terraform-modules/terraform-google-kubernetes-engine"
+
+  name     = "mycluster"
+  env      = "prod"
+  zone     = "europe-west1-b"
+  username = "admin"
+  password = "${random_string.password.result}"
 }

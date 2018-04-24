@@ -1,37 +1,57 @@
 package wrapper
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 
-	"github.com/perriea/tfversion/terraform"
+	tfversion "github.com/perriea/tfversion/terraform"
 )
 
 func switchVersion() error {
-	// version, err = readConfigHCL()
-	if yamlProvider.Terraform != "" {
-		err = terraform.Install(yamlProvider.Terraform, false)
+	if yamlProvider.Terraform.Version != "" {
+		if err = tfversion.Install(yamlProvider.Terraform.Version, true); err != nil {
+			return err
+		}
+	}
+
+	return tfversion.Install(terraformDefaultVersion, true)
+}
+
+// PreExecCmd application Terraform
+func PreExecCmd(authenticated bool, quiet bool) error {
+	// read YAML config
+	yamlProvider, err = readYAMLConfig()
+	if err != nil {
+		fmt.Printf("\033[1;31m%s\033[1;0m\n", err.Error())
 		return err
 	}
 
-	err = terraform.Install(terraformDefaultVersion, false)
-	return err
+	if err = switchVersion(); err != nil {
+		return err
+	}
+
+	if authenticated {
+		lookupProvider(quiet)
+	}
+
+	return nil
 }
 
-// execution : Execute terraform command
-func execCmd(args []string) {
-	var (
-		cmd *exec.Cmd
-	)
+// ExecCmd : Execute terraform command
+func ExecCmd(args []string, authenticated bool, quiet bool) error {
+	var cmd *exec.Cmd
 
-	// Prepare command with arguments
+	// exec && redirect stdout/err/in
 	cmd = exec.Command(binary, args...)
-
-	// redirect stdout/err/in
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 
 	// Execute command
-	cmd.Run()
+	if err = cmd.Run(); err != nil {
+		return err
+	}
+
+	return cmd.Wait()
 }

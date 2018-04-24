@@ -1,10 +1,10 @@
 ---
 cloud: 'gcp'
-terraform: '0.10.8'
-provider:
+terraform:
+  version: '0.11.6'
   general:
     project: 'my-project-169615'
     region: 'europe-west1'
     env: 'prod'
   credentials:
-    profile: '~/.gcloud/my-project-169615.json'
+    profile: '~/.gcloud/project-test-d6a0b529d6b4.json'

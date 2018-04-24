@@ -2,28 +2,21 @@ package wrapper
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
-	"github.com/spf13/viper"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // readYAMLConfig : Read config
 func readYAMLConfig() (YAMLConfig, error) {
 	var (
-		i         int
-		path      string
-		dir       string
-		config    string
-		subfolder []string
-		folder    []string
+		i                 int
+		path, dir, config string
+		folder, subfolder []string
 	)
-
-	i = 0
-	config = ""
-	path = ""
 
 	// Read in five subdirectories
 	for i < maxRotate {
@@ -50,15 +43,12 @@ func readYAMLConfig() (YAMLConfig, error) {
 		}
 	}
 
-	// Read file
-	viper.SetConfigName(config)
-	viper.AddConfigPath(path)
-	viper.SetConfigType("yaml")
-	if err = viper.ReadInConfig(); err != nil {
+	data, err := ioutil.ReadFile(fmt.Sprintf("%s/%s.yml", path, config))
+	if err != nil {
 		return YAMLConfig{}, err
 	}
 
-	if err = viper.Unmarshal(&yamlProvider); err != nil {
+	if err = yaml.Unmarshal(data, &yamlProvider); err != nil {
 		return YAMLConfig{}, err
 	}
 
@@ -67,8 +57,8 @@ func readYAMLConfig() (YAMLConfig, error) {
 
 func validConfigAuth() bool {
 	var (
-		fileDate int
-		fileNow  int
+		info os.FileInfo
+		age  int64
 	)
 
 	// File exist or not
@@ -77,12 +67,8 @@ func validConfigAuth() bool {
 		return false
 	}
 
-	// Convert string (hour) to int
-	fileDate, err = strconv.Atoi(info.ModTime().Format("20060102150405"))
-	FatalError(err)
-	fileNow, err = strconv.Atoi(time.Now().Format("20060102150405"))
-	FatalError(err)
-	if (fileNow - fileDate) > durationSess {
+	age = int64(time.Since(info.ModTime()).Seconds())
+	if age > durationSess {
 		return false
 	}
 
@@ -93,33 +79,24 @@ func validConfigAuth() bool {
 func writeAuthConfig(provider string) error {
 	var (
 		config string
+		file   *os.File
 	)
 
 	// open file using READ & CREATE permission
 	file, err = os.OpenFile(configFile, os.O_RDWR|os.O_CREATE, 0755)
-	if Error(err) {
+	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	switch provider {
-	case "aws":
-		config = fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\nenv = \"%s\"", yamlProvider.Provider.General.Region, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Provider.General.Env)
-	case "gcp":
-		// impossible interpolation: https://github.com/hashicorp/terraform/issues/10059
-		config = fmt.Sprintf("gcp_credentials = \"%s\"\ngcp_project = \"%s\"\ngcp_region = \"%s\"\nenv = \"%s\"", yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project, yamlProvider.Provider.General.Region, yamlProvider.Provider.General.Env)
-	}
+	config = fmt.Sprintf("region = \"%s\"\nenv = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\ngcp_credentials = \"%s\"\ngcp_project = \"%s\"",
+		yamlProvider.Terraform.General.Region, yamlProvider.Terraform.General.Env, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Terraform.Credentials.Profile, yamlProvider.Terraform.General.Project)
 
 	// write some text line-by-line to file
 	_, err = file.WriteString(config)
-	if Error(err) {
+	if err != nil {
 		return err
 	}
 
-	// save changes
-	err = file.Sync()
-	if Error(err) {
-		return err
-	}
-	return nil
+	return file.Sync()
 }
