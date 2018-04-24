@@ -1,13 +1,13 @@
 package wrapper
 
 import (
-	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/spf13/viper"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // readYAMLConfig : Read config
@@ -43,15 +43,12 @@ func readYAMLConfig() (YAMLConfig, error) {
 		}
 	}
 
-	// Read file
-	viper.SetConfigName(config)
-	viper.AddConfigPath(path)
-	viper.SetConfigType("yaml")
-	if err = viper.ReadInConfig(); err != nil {
+	data, err := ioutil.ReadFile(fmt.Sprintf("%s/%s.yml", path, config))
+	if err != nil {
 		return YAMLConfig{}, err
 	}
 
-	if err = viper.Unmarshal(&yamlProvider); err != nil {
+	if err = yaml.Unmarshal(data, &yamlProvider); err != nil {
 		return YAMLConfig{}, err
 	}
 
@@ -92,17 +89,8 @@ func writeAuthConfig(provider string) error {
 	}
 	defer file.Close()
 
-	switch provider {
-	case "aws":
-		config = fmt.Sprintf("aws_region = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\nenv = \"%s\"",
-			yamlProvider.Provider.General.Region, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Provider.General.Env)
-	case "gcp":
-		// impossible interpolation: https://github.com/hashicorp/terraform/issues/10059
-		config = fmt.Sprintf("gcp_credentials = \"%s\"\ngcp_project = \"%s\"\ngcp_region = \"%s\"\nenv = \"%s\"",
-			yamlProvider.Provider.Credentials.Profile, yamlProvider.Provider.General.Project, yamlProvider.Provider.General.Region, yamlProvider.Provider.General.Env)
-	default:
-		return errors.New("No selected provider")
-	}
+	config = fmt.Sprintf("region = \"%s\"\nenv = \"%s\"\naws_access_key = \"%s\"\naws_secret_key = \"%s\"\naws_token = \"%s\"\ngcp_credentials = \"%s\"\ngcp_project = \"%s\"",
+		yamlProvider.Terraform.General.Region, yamlProvider.Terraform.General.Env, os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), os.Getenv("AWS_SESSION_TOKEN"), yamlProvider.Terraform.Credentials.Profile, yamlProvider.Terraform.General.Project)
 
 	// write some text line-by-line to file
 	_, err = file.WriteString(config)
@@ -110,11 +98,5 @@ func writeAuthConfig(provider string) error {
 		return err
 	}
 
-	// save changes
-	err = file.Sync()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return file.Sync()
 }

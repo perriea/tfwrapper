@@ -1764,6 +1764,22 @@ func (d *DeploymentStatusRequest) GetState() string {
 	return *d.State
 }
 
+// GetTeams returns the Teams field if it's non-nil, zero value otherwise.
+func (d *DismissalRestrictionsRequest) GetTeams() []string {
+	if d == nil || d.Teams == nil {
+		return nil
+	}
+	return *d.Teams
+}
+
+// GetUsers returns the Users field if it's non-nil, zero value otherwise.
+func (d *DismissalRestrictionsRequest) GetUsers() []string {
+	if d == nil || d.Users == nil {
+		return nil
+	}
+	return *d.Users
+}
+
 // GetBody returns the Body field if it's non-nil, zero value otherwise.
 func (d *DraftReviewComment) GetBody() string {
 	if d == nil || d.Body == nil {
@@ -2732,12 +2748,52 @@ func (i *Installation) GetID() int64 {
 	return *i.ID
 }
 
+// GetPermissions returns the Permissions field.
+func (i *Installation) GetPermissions() *InstallationPermissions {
+	if i == nil {
+		return nil
+	}
+	return i.Permissions
+}
+
 // GetRepositoriesURL returns the RepositoriesURL field if it's non-nil, zero value otherwise.
 func (i *Installation) GetRepositoriesURL() string {
 	if i == nil || i.RepositoriesURL == nil {
 		return ""
 	}
 	return *i.RepositoriesURL
+}
+
+// GetRepositorySelection returns the RepositorySelection field if it's non-nil, zero value otherwise.
+func (i *Installation) GetRepositorySelection() string {
+	if i == nil || i.RepositorySelection == nil {
+		return ""
+	}
+	return *i.RepositorySelection
+}
+
+// GetSingleFileName returns the SingleFileName field if it's non-nil, zero value otherwise.
+func (i *Installation) GetSingleFileName() string {
+	if i == nil || i.SingleFileName == nil {
+		return ""
+	}
+	return *i.SingleFileName
+}
+
+// GetTargetID returns the TargetID field if it's non-nil, zero value otherwise.
+func (i *Installation) GetTargetID() int64 {
+	if i == nil || i.TargetID == nil {
+		return 0
+	}
+	return *i.TargetID
+}
+
+// GetTargetType returns the TargetType field if it's non-nil, zero value otherwise.
+func (i *Installation) GetTargetType() string {
+	if i == nil || i.TargetType == nil {
+		return ""
+	}
+	return *i.TargetType
 }
 
 // GetAction returns the Action field if it's non-nil, zero value otherwise.
@@ -2762,6 +2818,38 @@ func (i *InstallationEvent) GetSender() *User {
 		return nil
 	}
 	return i.Sender
+}
+
+// GetContents returns the Contents field if it's non-nil, zero value otherwise.
+func (i *InstallationPermissions) GetContents() string {
+	if i == nil || i.Contents == nil {
+		return ""
+	}
+	return *i.Contents
+}
+
+// GetIssues returns the Issues field if it's non-nil, zero value otherwise.
+func (i *InstallationPermissions) GetIssues() string {
+	if i == nil || i.Issues == nil {
+		return ""
+	}
+	return *i.Issues
+}
+
+// GetMetadata returns the Metadata field if it's non-nil, zero value otherwise.
+func (i *InstallationPermissions) GetMetadata() string {
+	if i == nil || i.Metadata == nil {
+		return ""
+	}
+	return *i.Metadata
+}
+
+// GetSingleFile returns the SingleFile field if it's non-nil, zero value otherwise.
+func (i *InstallationPermissions) GetSingleFile() string {
+	if i == nil || i.SingleFile == nil {
+		return ""
+	}
+	return *i.SingleFile
 }
 
 // GetAction returns the Action field if it's non-nil, zero value otherwise.
@@ -3066,6 +3154,14 @@ func (i *Issue) GetUser() *User {
 		return nil
 	}
 	return i.User
+}
+
+// GetAuthorAssociation returns the AuthorAssociation field if it's non-nil, zero value otherwise.
+func (i *IssueComment) GetAuthorAssociation() string {
+	if i == nil || i.AuthorAssociation == nil {
+		return ""
+	}
+	return *i.AuthorAssociation
 }
 
 // GetBody returns the Body field if it's non-nil, zero value otherwise.
@@ -3500,6 +3596,22 @@ func (l *Label) GetColor() string {
 	return *l.Color
 }
 
+// GetDefault returns the Default field if it's non-nil, zero value otherwise.
+func (l *Label) GetDefault() bool {
+	if l == nil || l.Default == nil {
+		return false
+	}
+	return *l.Default
+}
+
+// GetDescription returns the Description field if it's non-nil, zero value otherwise.
+func (l *Label) GetDescription() string {
+	if l == nil || l.Description == nil {
+		return ""
+	}
+	return *l.Description
+}
+
 // GetID returns the ID field if it's non-nil, zero value otherwise.
 func (l *Label) GetID() int64 {
 	if l == nil || l.ID == nil {
@@ -3578,6 +3690,78 @@ func (l *LabelEvent) GetRepo() *Repository {
 		return nil
 	}
 	return l.Repo
+}
+
+// GetColor returns the Color field if it's non-nil, zero value otherwise.
+func (l *LabelResult) GetColor() string {
+	if l == nil || l.Color == nil {
+		return ""
+	}
+	return *l.Color
+}
+
+// GetDefault returns the Default field if it's non-nil, zero value otherwise.
+func (l *LabelResult) GetDefault() bool {
+	if l == nil || l.Default == nil {
+		return false
+	}
+	return *l.Default
+}
+
+// GetDescription returns the Description field if it's non-nil, zero value otherwise.
+func (l *LabelResult) GetDescription() string {
+	if l == nil || l.Description == nil {
+		return ""
+	}
+	return *l.Description
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (l *LabelResult) GetID() int64 {
+	if l == nil || l.ID == nil {
+		return 0
+	}
+	return *l.ID
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (l *LabelResult) GetName() string {
+	if l == nil || l.Name == nil {
+		return ""
+	}
+	return *l.Name
+}
+
+// GetScore returns the Score field.
+func (l *LabelResult) GetScore() *float64 {
+	if l == nil {
+		return nil
+	}
+	return l.Score
+}
+
+// GetURL returns the URL field if it's non-nil, zero value otherwise.
+func (l *LabelResult) GetURL() string {
+	if l == nil || l.URL == nil {
+		return ""
+	}
+	return *l.URL
+}
+
+// GetIncompleteResults returns the IncompleteResults field if it's non-nil, zero value otherwise.
+func (l *LabelsSearchResult) GetIncompleteResults() bool {
+	if l == nil || l.IncompleteResults == nil {
+		return false
+	}
+	return *l.IncompleteResults
+}
+
+// GetTotal returns the Total field if it's non-nil, zero value otherwise.
+func (l *LabelsSearchResult) GetTotal() int {
+	if l == nil || l.Total == nil {
+		return 0
+	}
+	return *l.Total
 }
 
 // GetOID returns the OID field if it's non-nil, zero value otherwise.
@@ -5756,12 +5940,28 @@ func (p *PullRequest) GetComments() int {
 	return *p.Comments
 }
 
+// GetCommentsURL returns the CommentsURL field if it's non-nil, zero value otherwise.
+func (p *PullRequest) GetCommentsURL() string {
+	if p == nil || p.CommentsURL == nil {
+		return ""
+	}
+	return *p.CommentsURL
+}
+
 // GetCommits returns the Commits field if it's non-nil, zero value otherwise.
 func (p *PullRequest) GetCommits() int {
 	if p == nil || p.Commits == nil {
 		return 0
 	}
 	return *p.Commits
+}
+
+// GetCommitsURL returns the CommitsURL field if it's non-nil, zero value otherwise.
+func (p *PullRequest) GetCommitsURL() string {
+	if p == nil || p.CommitsURL == nil {
+		return ""
+	}
+	return *p.CommitsURL
 }
 
 // GetCreatedAt returns the CreatedAt field if it's non-nil, zero value otherwise.
@@ -6012,6 +6212,14 @@ func (p *PullRequestBranch) GetUser() *User {
 	return p.User
 }
 
+// GetAuthorAssociation returns the AuthorAssociation field if it's non-nil, zero value otherwise.
+func (p *PullRequestComment) GetAuthorAssociation() string {
+	if p == nil || p.AuthorAssociation == nil {
+		return ""
+	}
+	return *p.AuthorAssociation
+}
+
 // GetBody returns the Body field if it's non-nil, zero value otherwise.
 func (p *PullRequestComment) GetBody() string {
 	if p == nil || p.Body == nil {
@@ -6164,6 +6372,14 @@ func (p *PullRequestEvent) GetInstallation() *Installation {
 	return p.Installation
 }
 
+// GetLabel returns the Label field.
+func (p *PullRequestEvent) GetLabel() *Label {
+	if p == nil {
+		return nil
+	}
+	return p.Label
+}
+
 // GetNumber returns the Number field if it's non-nil, zero value otherwise.
 func (p *PullRequestEvent) GetNumber() int {
 	if p == nil || p.Number == nil {
@@ -6186,6 +6402,14 @@ func (p *PullRequestEvent) GetRepo() *Repository {
 		return nil
 	}
 	return p.Repo
+}
+
+// GetRequestedReviewer returns the RequestedReviewer field.
+func (p *PullRequestEvent) GetRequestedReviewer() *User {
+	if p == nil {
+		return nil
+	}
+	return p.RequestedReviewer
 }
 
 // GetSender returns the Sender field.
